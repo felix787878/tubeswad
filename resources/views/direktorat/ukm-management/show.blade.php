@@ -14,15 +14,15 @@
             </div>
 
             @if(session('success'))
-                <div class="mb-6 p-4 text-sm text-green-700 bg-green-100 rounded-lg shadow" role="alert" id="successMessage">
+                <div class="mb-6 p-4 text-sm text-green-700 bg-green-100 rounded-lg shadow" role="alert" id="successMessageShow">
                     {{ session('success') }}
-                    <button type="button" class="float-right font-semibold text-lg leading-none" onclick="document.getElementById('successMessage').style.display='none'">&times;</button>
+                    <button type="button" class="float-right font-semibold text-lg leading-none" onclick="document.getElementById('successMessageShow').style.display='none'">&times;</button>
                 </div>
             @endif
              @if(session('error'))
-                <div class="mb-6 p-4 text-sm text-red-700 bg-red-100 rounded-lg shadow" role="alert" id="errorMessage">
+                <div class="mb-6 p-4 text-sm text-red-700 bg-red-100 rounded-lg shadow" role="alert" id="errorMessageShow">
                     {{ session('error') }}
-                    <button type="button" class="float-right font-semibold text-lg leading-none" onclick="document.getElementById('errorMessage').style.display='none'">&times;</button>
+                    <button type="button" class="float-right font-semibold text-lg leading-none" onclick="document.getElementById('errorMessageShow').style.display='none'">&times;</button>
                 </div>
             @endif
 
@@ -37,7 +37,7 @@
                 @endif
 
                 <div class="p-6 md:p-8">
-                    {{-- Header dengan Logo dan Nama --}}
+                    {{-- Header dengan Logo dan Nama (tetap sama) --}}
                     <div class="flex flex-col sm:flex-row items-start sm:items-center mb-6">
                         @if($ukmOrmawa->logo_url)
                             <img src="{{ asset('storage/' . $ukmOrmawa->logo_url) }}" alt="Logo {{ $ukmOrmawa->name }}" class="w-24 h-24 object-contain rounded-lg border border-gray-200 shadow-md mr-0 mb-4 sm:mr-6 sm:mb-0">
@@ -55,14 +55,14 @@
                             <div class="mt-1 text-sm text-gray-500">
                                 Diajukan oleh: {{ $ukmOrmawa->pengurus->name ?? 'N/A' }} ({{ $ukmOrmawa->pengurus->email ?? 'N/A' }})
                             </div>
-                             <div class="mt-1 text-sm text-gray-500">
+                                <div class="mt-1 text-sm text-gray-500">
                                 Terakhir update profil: {{ $ukmOrmawa->updated_at->isoFormat('D MMMM YYYY, HH:mm') }}
                             </div>
                         </div>
                     </div>
 
-                    {{-- Status Saat Ini dan Tombol CRUD --}}
-                    <div class="mb-6 p-4 bg-gray-50 rounded-md flex flex-wrap justify-between items-center gap-4">
+                    {{-- Status Saat Ini dan Tombol CRUD (tetap sama) --}}
+                     <div class="mb-6 p-4 bg-gray-50 rounded-md flex flex-wrap justify-between items-center gap-4">
                         <div>
                             <span class="font-semibold text-gray-700">Status Saat Ini:</span>
                             @if($ukmOrmawa->status == 'approved')
@@ -91,7 +91,7 @@
                         </div>
                     </div>
 
-                    {{-- Detail Informasi --}}
+                    {{-- Detail Informasi (tetap sama) --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-8">
                         <div>
                             <h3 class="font-semibold text-gray-700 mb-1">Deskripsi Singkat:</h3>
@@ -134,57 +134,98 @@
                         </div>
                         @if($ukmOrmawa->verification_notes)
                         <div class="md:col-span-2 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
-                            <h3 class="font-semibold text-yellow-800 mb-1">Catatan Verifikasi Terakhir:</h3>
+                            <h3 class="font-semibold text-yellow-800 mb-1">Catatan Verifikasi Terakhir dari Direktorat:</h3>
                             <p class="text-yellow-700 text-sm whitespace-pre-line">{{ $ukmOrmawa->verification_notes }}</p>
                         </div>
                         @endif
                     </div>
 
-                    {{-- Form Aksi Verifikasi --}}
+                    {{-- Form Aksi Verifikasi dengan Tombol Terpisah --}}
                     <div class="mt-8 pt-6 border-t border-gray-200">
-                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Tindakan Verifikasi</h2>
-                        <form action="{{ route('direktorat.ukm-ormawa.updateStatus', $ukmOrmawa->id) }}" method="POST">
-                            @csrf
-                            @method('PATCH')
-                            <div class="mb-4">
-                                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Ubah Status Menjadi:</label>
-                                <select name="status" id="status" class="block w-full sm:w-1/2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-200 focus:ring-opacity-50 py-2">
-                                    <option value="approved" {{ $ukmOrmawa->status == 'approved' ? 'selected' : '' }}>Disetujui (Approved)</option>
-                                    <option value="pending_verification" {{ $ukmOrmawa->status == 'pending_verification' ? 'selected' : '' }}>Menunggu Verifikasi (Pending)</option>
-                                    <option value="needs_update" {{ $ukmOrmawa->status == 'needs_update' ? 'selected' : '' }}>Perlu Revisi (Needs Update)</option>
-                                    <option value="rejected" {{ $ukmOrmawa->status == 'rejected' ? 'selected' : '' }}>Ditolak (Rejected)</option>
-                                </select>
+                        <h2 class="text-xl font-semibold text-gray-700 mb-1">Tindakan Verifikasi</h2>
+                        <p class="text-sm text-gray-500 mb-6">Pilih tindakan yang sesuai untuk profil UKM/Ormawa ini.</p>
+                        
+                        <div x-data="{ showNotesFor: '' }"> {{-- Alpine.js untuk toggle textarea catatan --}}
+                            <div class="flex flex-wrap gap-3 items-start">
+                                {{-- Tombol Setujui --}}
+                                @if($ukmOrmawa->status !== 'approved')
+                                <form action="{{ route('direktorat.ukm-ormawa.updateStatus', $ukmOrmawa->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Anda yakin ingin MENYETUJUI profil UKM/Ormawa ini?')">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="status" value="approved">
+                                    <input type="hidden" name="verification_notes" value=""> {{-- Kosongkan catatan saat approve --}}
+                                    <button type="submit" class="px-5 py-2.5 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 inline-flex items-center">
+                                        <span class="material-icons text-base mr-1.5">check_circle</span>
+                                        Setujui
+                                    </button>
+                                </form>
+                                @endif
+
+                                {{-- Tombol Minta Revisi --}}
+                                @if($ukmOrmawa->status !== 'needs_update')
+                                <button @click="showNotesFor = (showNotesFor === 'needs_update' ? '' : 'needs_update')" type="button" class="px-5 py-2.5 text-sm font-medium text-white bg-orange-500 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 inline-flex items-center">
+                                    <span class="material-icons text-base mr-1.5">rate_review</span>
+                                    Minta Revisi
+                                </button>
+                                @endif
+
+                                {{-- Tombol Tolak --}}
+                                @if($ukmOrmawa->status !== 'rejected')
+                                <button @click="showNotesFor = (showNotesFor === 'rejected' ? '' : 'rejected')" type="button" class="px-5 py-2.5 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 inline-flex items-center">
+                                    <span class="material-icons text-base mr-1.5">cancel</span>
+                                    Tolak
+                                </button>
+                                @endif
                             </div>
-                            <div class="mb-4">
-                                <label for="verification_notes" class="block text-sm font-medium text-gray-700 mb-1">Catatan Verifikasi (Opsional, terutama untuk 'Perlu Revisi' atau 'Ditolak'):</label>
-                                <textarea name="verification_notes" id="verification_notes" rows="3" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-200 focus:ring-opacity-50 py-2" placeholder="Berikan alasan jika ditolak atau detail revisi yang diperlukan...">{{ old('verification_notes', $ukmOrmawa->verification_notes) }}</textarea>
-                            </div>
-                            <button type="submit" class="px-6 py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                <span class="material-icons text-base mr-1 align-middle">save</span>
-                                Simpan Status
-                            </button>
-                        </form>
+
+                            {{-- Form untuk Minta Revisi (muncul kondisional) --}}
+                            <form x-show="showNotesFor === 'needs_update'" x-transition action="{{ route('direktorat.ukm-ormawa.updateStatus', $ukmOrmawa->id) }}" method="POST" class="mt-4 p-4 border border-orange-300 rounded-md bg-orange-50">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="needs_update">
+                                <label for="notes_needs_update" class="block text-sm font-medium text-orange-700 mb-1">Catatan untuk Revisi <span class="text-red-500">*</span></label>
+                                <textarea name="verification_notes" id="notes_needs_update" rows="3" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 sm:text-sm" placeholder="Jelaskan bagian mana yang perlu direvisi oleh pengurus...">{{ $ukmOrmawa->status === 'needs_update' ? $ukmOrmawa->verification_notes : old('verification_notes') }}</textarea>
+                                <div class="mt-3">
+                                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-orange-500 rounded-md hover:bg-orange-600">Kirim Permintaan Revisi</button>
+                                    <button @click="showNotesFor = ''" type="button" class="ml-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">Batal</button>
+                                </div>
+                            </form>
+
+                            {{-- Form untuk Tolak (muncul kondisional) --}}
+                            <form x-show="showNotesFor === 'rejected'" x-transition action="{{ route('direktorat.ukm-ormawa.updateStatus', $ukmOrmawa->id) }}" method="POST" class="mt-4 p-4 border border-red-300 rounded-md bg-red-50">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="rejected">
+                                <label for="notes_rejected" class="block text-sm font-medium text-red-700 mb-1">Alasan Penolakan <span class="text-red-500">*</span></label>
+                                <textarea name="verification_notes" id="notes_rejected" rows="3" required class="block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 sm:text-sm" placeholder="Jelaskan alasan penolakan profil UKM/Ormawa ini...">{{ $ukmOrmawa->status === 'rejected' ? $ukmOrmawa->verification_notes : old('verification_notes') }}</textarea>
+                                 <div class="mt-3">
+                                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700">Konfirmasi Penolakan</button>
+                                    <button @click="showNotesFor = ''" type="button" class="ml-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">Batal</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function fadeOutAndHide(elementId) {
-                const element = document.getElementById(elementId);
-                if (element) {
-                    setTimeout(() => {
-                        element.style.transition = 'opacity 0.5s ease-out';
-                        element.style.opacity = '0';
-                        setTimeout(() => element.style.display = 'none', 500);
-                    }, 7000); // Notifikasi hilang setelah 7 detik
+        @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                function fadeOutAndHide(elementId) {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        setTimeout(() => {
+                            element.style.transition = 'opacity 0.5s ease-out';
+                            element.style.opacity = '0';
+                            setTimeout(() => element.style.display = 'none', 500);
+                        }, 7000); 
+                    }
                 }
-            }
-            fadeOutAndHide('successMessage');
-            fadeOutAndHide('errorMessage');
-        });
-    </script>
-    @endpush
-</x-direktorat-app-layout>
+                fadeOutAndHide('successMessageShow');
+                fadeOutAndHide('errorMessageShow');
+            });
+        </script>
+        @endpush
+    </x-direktorat-app-layout>
+    ```
+
