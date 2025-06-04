@@ -73,48 +73,59 @@
 
     {{-- Daftar Card UKM/Ormawa --}}
     @if(isset($ukmOrmawas) && $ukmOrmawas->count() > 0)
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-6 gap-y-8">
-            @foreach($ukmOrmawas as $item)
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-                    <a href="{{ route('ukm-ormawa.show', ['slug' => $item->slug]) }}" class="block group">
-                        <img class="w-full h-48 object-cover group-hover:opacity-90 transition-opacity" src="{{ $item->logo_url ? asset('storage/' . $item->logo_url) : 'https://via.placeholder.com/400x250/E0E0E0/BDBDBD?text=' . urlencode($item->name) }}" alt="Logo {{ $item->name }}">
-                    </a>
-                    <div class="p-5 flex flex-col flex-grow">
-                        <div class="mb-2">
-                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full
-                                {{ $item->type === 'UKM' ? 'bg-blue-100 text-blue-800' : ($item->type === 'Ormawa' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800') }}">
-                                {{ $item->type }}
-                            </span>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-1 hover:text-red-600 transition-colors">
-                             <a href="{{ route('ukm-ormawa.show', ['slug' => $item->slug]) }}">{{ $item->name }}</a>
-                        </h3>
-                        <p class="text-sm text-gray-500 mb-2"><span class="font-medium">Kategori:</span> {{ $item->category }}</p>
-                        <p class="text-sm text-gray-600 flex-grow mb-4 leading-relaxed">{{ Str::limit($item->description_short, 120) }}</p>
-                        
-                        <div class="mt-auto pt-4 border-t border-gray-200 space-y-2">
-                            <a href="{{ route('ukm-ormawa.show', ['slug' => $item->slug]) }}" class="flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium text-indigo-700 bg-indigo-100 rounded-md hover:bg-indigo-200 transition-colors">
-                                <span class="material-icons text-sm mr-1.5">visibility</span>
-                                Lihat Detail
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-6 gap-y-8">
+        @foreach($ukmOrmawas as $item)
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                <a href="{{ route('ukm-ormawa.show', ['slug' => $item->slug]) }}" class="block group">
+                    <img class="w-full h-48 object-cover group-hover:opacity-90 transition-opacity" 
+                         src="{{ $item->logo_url ? asset('storage/' . $item->logo_url) : 'https://via.placeholder.com/400x250/E0E0E0/BDBDBD?text=' . urlencode($item->name) }}" 
+                         alt="Logo {{ $item->name }}">
+                </a>
+                <div class="p-5 flex flex-col flex-grow">
+                    {{-- ... (Nama, Tipe, Kategori, Deskripsi tetap sama) ... --}}
+                    <div class="mb-2">
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full
+                            {{ $item->type === 'UKM' ? 'bg-blue-100 text-blue-800' : ($item->type === 'Ormawa' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800') }}">
+                            {{ $item->type }}
+                        </span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1 hover:text-red-600 transition-colors">
+                            <a href="{{ route('ukm-ormawa.show', ['slug' => $item->slug]) }}">{{ $item->name }}</a>
+                    </h3>
+                    <p class="text-sm text-gray-500 mb-2"><span class="font-medium">Kategori:</span> {{ $item->category }}</p>
+                    <p class="text-sm text-gray-600 flex-grow mb-4 leading-relaxed">{{ Str::limit($item->description_short, 120) }}</p>
+                    
+                    <div class="mt-auto pt-4 border-t border-gray-200 space-y-2">
+                        <a href="{{ route('ukm-ormawa.show', ['slug' => $item->slug]) }}" class="flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium text-indigo-700 bg-indigo-100 rounded-md hover:bg-indigo-200 transition-colors">
+                            <span class="material-icons text-sm mr-1.5">visibility</span>
+                            Lihat Detail
+                        </a>
+
+                        {{-- LOGIKA TOMBOL PENDAFTARAN YANG DIPERBARUI --}}
+                        @php
+                            $isActuallyOpen = $item->is_registration_open &&
+                                              ($item->registration_deadline == null || \Carbon\Carbon::parse($item->registration_deadline)->endOfDay()->isFuture());
+                        @endphp
+
+                        @if($isActuallyOpen)
+                            <a href="{{ route('ukm-ormawa.apply.form', ['ukm_ormawa_slug' => $item->slug]) }}" class="flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors">
+                                    <span class="material-icons text-sm mr-1.5">person_add</span>
+                                Daftar Sekarang
+                                @if($item->registration_deadline)
+                                <span class="text-xs ml-1.5 opacity-80">(s/d {{ \Carbon\Carbon::parse($item->registration_deadline)->translatedFormat('d M Y') }})</span>
+                                @endif
                             </a>
-                            @if($item->is_registration_open)
-                                <a href="{{ route('ukm-ormawa.apply.form', ['ukm_ormawa_slug' => $item->slug]) }}" class="flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 transition-colors">
-                                     <span class="material-icons text-sm mr-1.5">person_add</span>
-                                    Daftar Sekarang
-                                    @if($item->registration_deadline)
-                                    <span class="text-xs ml-1.5 opacity-80">(s/d {{ $item->registration_deadline->format('d M Y') }})</span>
-                                    @endif
-                                </a>
-                            @else
-                                <button disabled class="flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium text-gray-500 bg-gray-200 rounded-md cursor-not-allowed">
-                                    <span class="material-icons text-sm mr-1.5">lock</span>
-                                    Pendaftaran Ditutup
-                                </button>
-                            @endif
-                        </div>
+                        @else
+                            <button disabled class="flex items-center justify-center w-full px-4 py-2.5 text-sm font-medium text-gray-500 bg-gray-200 rounded-md cursor-not-allowed">
+                                <span class="material-icons text-sm mr-1.5">lock</span>
+                                Pendaftaran Ditutup
+                            </button>
+                        @endif
+                        {{-- AKHIR LOGIKA TOMBOL PENDAFTARAN --}}
                     </div>
                 </div>
-            @endforeach
+            </div>
+        @endforeach
         </div>
         @if ($ukmOrmawas instanceof \Illuminate\Pagination\LengthAwarePaginator && $ukmOrmawas->hasPages())
             <div class="mt-8">

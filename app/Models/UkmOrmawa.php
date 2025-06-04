@@ -27,7 +27,9 @@ class UkmOrmawa extends Model
         'contact_instagram',
         'is_registration_open',
         'registration_deadline',
-        'status', // <-- TAMBAHKAN INI
+        'status', 
+        'verification_notes', 
+
     ];
 
     protected $casts = [

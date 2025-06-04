@@ -5,17 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UkmOrmawa;
 use Illuminate\Support\Str;
+use Carbon\Carbon; // Pastikan Carbon diimport
 
 class UkmOrmawaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = UkmOrmawa::where('status', 'approved'); // <-- HANYA TAMPILKAN YANG APPROVED
+        $query = UkmOrmawa::where('status', 'approved') // Hanya yang disetujui Ditmawa
+                          ->whereNotNull('pengurus_id'); // <-- TAMBAHAN: Hanya yang sudah ada pengurusnya
 
         if ($request->filled('search_name')) {
             $query->where('name', 'like', '%' . $request->search_name . '%');
         }
-        // ... (filter lainnya tetap sama) ...
+        
         if ($request->filled('filter_type')) {
             $query->where('type', $request->filter_type);
         }
@@ -31,9 +33,10 @@ class UkmOrmawaController extends Controller
 
     public function show($slug)
     {
-        // Mahasiswa hanya bisa lihat detail UKM yang sudah approved
+        // Mahasiswa hanya bisa lihat detail UKM yang sudah approved dan punya pengurus
         $item = UkmOrmawa::where('slug', $slug)
-                         ->where('status', 'approved') // <-- HANYA TAMPILKAN DETAIL YANG APPROVED
+                         ->where('status', 'approved')
+                         ->whereNotNull('pengurus_id') // <-- TAMBAHAN: Opsional, jika detail juga harus mengikuti aturan yang sama
                          ->firstOrFail();
 
         return view('ukm-ormawa.show', compact('item'));

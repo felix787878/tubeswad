@@ -6,66 +6,77 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UkmApplication;
-use App\Models\Article;
+use App\Models\Article; // Jika Anda ingin menampilkan artikel terkait UKM-nya
+use App\Models\Activity; // Jika Anda ingin menampilkan statistik kegiatan
 use App\Models\User;
-use Carbon\Carbon; // Import Carbon
+use Carbon\Carbon;
 
 class PengurusDashboardController extends Controller
 {
     public function index()
     {
         $pengurus = Auth::user();
-        $ukmOrmawa = $pengurus->managesUkmOrmawa;
+        $ukmOrmawa = $pengurus->managesUkmOrmawa; // Ini bisa null jika pengurus baru
 
-        if (!$ukmOrmawa) {
-            return redirect()->route('home')->with('error', 'Anda tidak terhubung dengan UKM/Ormawa manapun untuk mengakses dashboard pengurus.');
+        // Data default jika $ukmOrmawa adalah null, agar view tidak error
+        $memberCount = 0;
+        $newApplicationsCount = 0;
+        $publishedArticlesCount = 0; // Atau ambil artikel umum jika pengurus belum punya UKM
+        $chartData = ['labels' => [], 'data' => []];
+        $recentApplications = collect();
+
+        if ($ukmOrmawa) {
+            // Statistik Dashboard hanya jika ukmOrmawa ada
+            $memberCount = UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)
+                                        ->where('status', 'approved')
+                                        ->count();
+            
+            $newApplicationsCount = UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)
+                                                ->where('status', 'pending')
+                                                ->count();
+            
+            // Artikel yang dibuat oleh pengurus ini ATAU terkait dengan UKM/Ormawa
+            // Sesuaikan logika ini. Misal, artikel yang user_id nya adalah pengurus ini
+            // ATAU jika artikel punya kolom ukm_ormawa_id
+            $publishedArticlesCount = Article::where(function ($query) use ($pengurus, $ukmOrmawa) {
+                                        $query->where('user_id', $pengurus->id);
+                                        if ($ukmOrmawa) { // Cek lagi untuk keamanan
+                                            // $query->orWhere('ukm_ormawa_id', $ukmOrmawa->id); // Jika ada relasi artikel ke UKM
+                                        }
+                                    })->count();
+
+
+            // Data untuk Chart Pendaftaran Anggota per Bulan
+            $months = [];
+            $data = [];
+            for ($i = 5; $i >= 0; $i--) { 
+                $date = Carbon::now()->subMonths($i);
+                $months[] = $date->locale('id')->isoFormat('MMM');
+                $count = UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)
+                                       ->whereMonth('created_at', $date->month)
+                                       ->whereYear('created_at', $date->year)
+                                       ->count();
+                $data[] = $count;
+            }
+
+            $chartData = [
+                'labels' => $months,
+                'data' => $data
+            ];
+            
+            $recentApplications = UkmApplication::with('user')
+                                              ->where('ukm_ormawa_id', $ukmOrmawa->id)
+                                              ->orderBy('created_at', 'desc')
+                                              ->take(5)
+                                              ->get();
         }
-
-        // Statistik Dashboard
-        // Jumlah Anggota (yang pendaftarannya approved untuk UKM ini)
-        $memberCount = UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)
-                                    ->where('status', 'approved')
-                                    ->count();
-        
-        // Pendaftar Baru (yang statusnya pending untuk UKM ini)
-        $newApplicationsCount = UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)
-                                            ->where('status', 'pending')
-                                            ->count();
-        
-        // Contoh: Artikel yang dibuat oleh pengurus ini (jika pengurus yang sama membuat artikel)
-        // Atau, jika artikel terkait dengan UKM/Ormawa (Anda perlu menambahkan kolom ukm_ormawa_id ke tabel articles)
-        $publishedArticlesCount = Article::where('user_id', $pengurus->id)->count(); // Contoh: artikel yang dibuat oleh pengurus
-        // Jika ada kolom ukm_ormawa_id di tabel articles:
-        // $publishedArticlesCount = Article::where('ukm_ormawa_id', $ukmOrmawa->id)->count();
-
-
-        // Data untuk Chart Pendaftaran Anggota per Bulan
-        $months = [];
-        $data = [];
-        for ($i = 5; $i >= 0; $i--) { // Ambil data 6 bulan terakhir
-            $date = Carbon::now()->subMonths($i);
-            $months[] = $date->locale('id')->isoFormat('MMM'); // Format bulan (contoh: Jan, Feb)
-            $count = UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)
-                                   ->whereMonth('created_at', $date->month)
-                                   ->whereYear('created_at', $date->year)
-                                   ->count();
-            $data[] = $count;
-        }
-
-        $chartData = [
-            'labels' => $months,
-            'data' => $data
-        ];
-        
-        // Pendaftar Terkini (recent applications)
-        $recentApplications = UkmApplication::with('user') // Eager load user pendaftar
-                                          ->where('ukm_ormawa_id', $ukmOrmawa->id)
-                                          ->orderBy('created_at', 'desc')
-                                          ->take(5) // Ambil 5 terbaru
-                                          ->get();
+        // JANGAN REDIRECT LAGI DARI SINI JIKA $ukmOrmawa NULL
+        // if (!$ukmOrmawa) {
+        //     return redirect()->route('home')->with('error', 'Anda tidak terhubung dengan UKM/Ormawa manapun untuk mengakses dashboard pengurus.');
+        // }
 
         return view('pengurus.dashboard', compact(
-            'ukmOrmawa',
+            'ukmOrmawa', // Akan bernilai null jika belum ada
             'memberCount',
             'newApplicationsCount',
             'publishedArticlesCount',

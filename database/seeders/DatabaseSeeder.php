@@ -13,8 +13,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            UkmOrmawaSeeder::class,         // Panggil seeder UKM/Ormawa dulu
-            PredefinedUsersSeeder::class,
+            // Seeder lain yang ingin Anda panggil, contoh:
+            UkmOrmawaSeeder::class, // Pastikan class ini ada dan benar
+            PredefinedUsersSeeder::class, // Pastikan class ini ada dan benar
+            // AdminSeeder::class, // Jika Anda menggunakan ini
         ]);
+
+        // Atau jika Anda tidak ingin memanggil seeder lain dari sini,
+        // Anda bisa mengosongkan array di atas atau mengomentari $this->call(...)
+        // Contoh:
+        // $this->call([]);
     }
 }

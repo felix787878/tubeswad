@@ -90,26 +90,14 @@ Route::middleware(['auth', 'role:pengurus'])->prefix('pengurus')->name('pengurus
 Route::middleware(['auth', 'role:direktorat'])->prefix('direktorat')->name('direktorat.')->group(function () {
     Route::get('/dashboard', [DirektoratDashboardController::class, 'index'])->name('dashboard');
     
-    // Route untuk manajemen UKM/Ormawa oleh Direktorat (daftar, verifikasi, dll.)
-    // Ini akan kita buat di langkah selanjutnya, untuk sekarang kita buat placeholder
-    Route::get('/ukm-ormawa', function () { 
-        // Sementara, ambil data seperti di dashboard atau buat method khusus di UkmManagementController
-        $ukmOrmawas = \App\Models\UkmOrmawa::orderBy('status')->orderBy('name')->paginate(10);
-        return view('direktorat.ukm-management.index', compact('ukmOrmawas')); 
-    })->name('ukm-ormawa.index');
-
-    Route::get('/ukm-ormawa/{ukmOrmawa}/show', function (\App\Models\UkmOrmawa $ukmOrmawa) {
-        // return view('direktorat.ukm-management.show', compact('ukmOrmawa'));
-        return redirect()->route('direktorat.ukm-ormawa.index')->with('warning', 'Halaman detail verifikasi belum diimplementasikan sepenuhnya.');
-    })->name('ukm-ormawa.show');
+    Route::get('/ukm-ormawa', [UkmManagementController::class, 'index'])->name('ukm-ormawa.index');
+    Route::get('/ukm-ormawa/{ukmOrmawa}/show', [UkmManagementController::class, 'show'])->name('ukm-ormawa.show');
+    Route::patch('/ukm-ormawa/{ukmOrmawa}/update-status', [UkmManagementController::class, 'updateStatus'])->name('ukm-ormawa.updateStatus');
     
-    Route::patch('/ukm-ormawa/{ukmOrmawa}/update-status', function (\Illuminate\Http\Request $request, \App\Models\UkmOrmawa $ukmOrmawa) {
-        // Logika untuk update status oleh direktorat
-        // $ukmOrmawa->status = $request->status;
-        // $ukmOrmawa->save();
-        // return back()->with('success', 'Status UKM/Ormawa berhasil diperbarui.');
-        return redirect()->route('direktorat.ukm-ormawa.index')->with('warning', 'Fitur update status belum diimplementasikan sepenuhnya.');
-    })->name('ukm-ormawa.updateStatus');
+    // CRUD routes by Direktorat
+    Route::get('/ukm-ormawa/{ukmOrmawa}/edit', [UkmManagementController::class, 'edit'])->name('ukm-ormawa.edit');
+    Route::put('/ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'update'])->name('ukm-ormawa.update');
+    Route::delete('/ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'destroy'])->name('ukm-ormawa.destroy');
 
 
 });
