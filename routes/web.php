@@ -17,6 +17,8 @@ use App\Http\Controllers\Pengurus\MemberManagementController; // <--- TAMBAHKAN 
 use App\Http\Controllers\Pengurus\ActivityManagementController;
 use App\Http\Controllers\Direktorat\DirektoratDashboardController;
 use App\Http\Controllers\Direktorat\UkmManagementController; // Akan digunakan nanti
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;  // Pastikan ini ada
 
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -98,6 +100,44 @@ Route::middleware(['auth', 'role:direktorat'])->prefix('direktorat')->name('dire
     Route::get('/ukm-ormawa/{ukmOrmawa}/edit', [UkmManagementController::class, 'edit'])->name('ukm-ormawa.edit');
     Route::put('/ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'update'])->name('ukm-ormawa.update');
     Route::delete('/ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'destroy'])->name('ukm-ormawa.destroy');
-
-
 });
+
+Route::get('/proxy/goapi/regional/{endpoint}', function (Request $request, $endpoint) {
+    $apiKey = env('GOAPI_API_KEY', 'FALLBACK_KEY_JIKA_TIDAK_ADA_DI_ENV'); // Ambil dari .env
+    $baseUrl = 'https://api.goapi.io/regional';
+
+    if (empty($apiKey) || $apiKey === 'FALLBACK_KEY_JIKA_TIDAK_ADA_DI_ENV') {
+        \Log::error('GOAPI_API_KEY is not set correctly in .env file or is using fallback.');
+        return response()->json([
+            'status' => 'error',
+            'message' => 'API key for GoAPI is not configured on the server.'
+        ], 500);
+    }
+
+    $queryParams = $request->query();
+    $queryParams['api_key'] = $apiKey;
+
+    try {
+        // \Log::info("Proxying (from web.php) GoAPI request to: {$baseUrl}/{$endpoint} with params: ", $queryParams);
+        $response = Http::timeout(15)->get("{$baseUrl}/{$endpoint}", $queryParams);
+
+        if ($response->successful()) {
+            return $response->json(); 
+        } else {
+            \Log::error("GoAPI Error (from web.php) - Status: " . $response->status() . " Body: " . $response->body());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch data from GoAPI',
+                'goapi_status' => $response->status(),
+                'goapi_body' => $response->json() ?: $response->body()
+            ], $response->status() == 0 ? 500 : $response->status());
+        }
+    } catch (\Illuminate\Http\Client\ConnectionException $e) {
+        \Log::error('GoAPI Connection Exception (from web.php): ' . $e->getMessage());
+        return response()->json(['status' => 'error', 'message' => 'Could not connect to GoAPI: ' . $e->getMessage()], 503);
+    } catch (\Exception $e) {
+        \Log::error('GoAPI Generic Proxy Exception (from web.php): ' . $e->getMessage());
+        return response()->json(['status' => 'error', 'message' => 'An unexpected error occurred.'], 500);
+    }
+})->where('endpoint', '(provinsi|kota|kecamatan|kelurahan)')
+  ->name('proxy.goapi.regional'); // Memberi nama route (opsional tapi baik)

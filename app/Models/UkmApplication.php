@@ -11,24 +11,27 @@ class UkmApplication extends Model
 
     protected $fillable = [
         'user_id',
-        'ukm_ormawa_id',   // Pastikan ini ada
+        'ukm_ormawa_id',
+        'ukm_ormawa_name', // Tetap sertakan jika masih ada di tabel
+        'ukm_ormawa_slug', // Tetap sertakan jika masih ada di tabel
         'reason_to_join',
         'skills_experience',
         'phone_contact',
+        'province',       // <-- TAMBAHKAN
+        'city',           // <-- TAMBAHKAN
+        'district',       // <-- TAMBAHKAN
+        'village',        // <-- TAMBAHKAN
+        'full_address',   // <-- TAMBAHKAN
         'status',
-        // Kolom 'ukm_ormawa_name' dan 'ukm_ormawa_slug' bisa dihapus dari fillable
-        // jika Anda sudah menghapusnya dari tabel dan tidak menggunakannya lagi.
-        // Jika masih ada di tabel dan diisi sementara, biarkan.
-        'ukm_ormawa_name', 
-        'ukm_ormawa_slug',
     ];
-
-    public function ukmOrmawa()
-    {
-        return $this->belongsTo(UkmOrmawa::class);
-    }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+// ...
+public function ukmOrmawa()
+{
+    return $this->belongsTo(UkmOrmawa::class);
+}
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
+    // ...
 }
