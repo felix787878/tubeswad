@@ -66,11 +66,61 @@
                                 </div>
                             </div>
 
-                            {{-- Lokasi --}}
-                            <div>
-                                <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Lokasi <span class="text-red-500">*</span></label>
-                                <input type="text" name="location" id="location" value="{{ old('location') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3" placeholder="Contoh: Aula Gedung X, Zoom Meeting (Online)">
-                                @error('location') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
+                            {{-- ====================================================================== --}}
+                            {{-- LOKASI DAN ALAMAT SEKRETARIAT --}}
+                            {{-- ====================================================================== --}}
+                            <div class="mt-6 pt-4 border-t border-gray-200">
+                                <h3 class="text-md font-semibold text-gray-700 mb-2">Lokasi dan Alamat Sekretariat</h3>
+                                <div class="space-y-6">
+                                    {{-- Lokasi Kegiatan --}}
+                                    <div>
+                                        <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Lokasi Kegiatan <span class="text-red-500">*</span></label>
+                                        <input type="text" name="location" id="location" value="{{ old('location') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3" placeholder="Contoh: Aula Gedung X, Zoom Meeting (Online)">
+                                        @error('location') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    {{-- Alamat Lengkap Sekretariat --}}
+                                    <div>
+                                        <label for="alamat_lengkap" class="block text-sm font-medium text-gray-700 mb-1">Alamat Lengkap Sekretariat <span class="text-red-500">*</span></label>
+                                        <textarea name="alamat_lengkap" id="alamat_lengkap" rows="3" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3" placeholder="Contoh: Jl. Telekomunikasi No. 1, Gedung UKM Ruang 101">{{ old('alamat_lengkap') }}</textarea>
+                                        @error('alamat_lengkap') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    {{-- Provinsi & Kab/Kota --}}
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label for="provinsi" class="block text-sm font-medium text-gray-700 mb-1">Provinsi <span class="text-red-500">*</span></label>
+                                            <input type="text" name="provinsi" id="provinsi" value="{{ old('provinsi') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3" placeholder="Contoh: Jawa Barat">
+                                            @error('provinsi') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
+                                        </div>
+                                        <div>
+                                            <label for="kabkota" class="block text-sm font-medium text-gray-700 mb-1">Kabupaten/Kota <span class="text-red-500">*</span></label>
+                                            <input type="text" name="kabkota" id="kabkota" value="{{ old('kabkota') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3" placeholder="Contoh: Kabupaten Bandung">
+                                            @error('kabkota') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
+                                        </div>
+                                    </div>
+
+                                    {{-- Kecamatan & Desa/Kelurahan --}}
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label for="kecamatan" class="block text-sm font-medium text-gray-700 mb-1">Kecamatan <span class="text-red-500">*</span></label>
+                                            <input type="text" name="kecamatan" id="kecamatan" value="{{ old('kecamatan') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3" placeholder="Contoh: Bojongsoang">
+                                            @error('kecamatan') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
+                                        </div>
+                                        <div>
+                                            <label for="desakel" class="block text-sm font-medium text-gray-700 mb-1">Desa/Kelurahan <span class="text-red-500">*</span></label>
+                                            <input type="text" name="desakel" id="desakel" value="{{ old('desakel') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3" placeholder="Contoh: Sukapura">
+                                            @error('desakel') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
+                                        </div>
+                                    </div>
+                                    
+                                    {{-- Link Google Maps --}}
+                                    <div>
+                                        <label for="Maps_link" class="block text-sm font-medium text-gray-700 mb-1">Link Google Maps (Opsional)</label>
+                                        <input type="url" name="Maps_link" id="Maps_link" value="{{ old('Maps_link') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3" placeholder="https://maps.app.goo.gl/contohlink">
+                                        @error('Maps_link') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
+                                    </div>
+                                </div>
                             </div>
 
                             {{-- Tipe Kegiatan --}}

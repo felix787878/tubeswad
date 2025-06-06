@@ -82,7 +82,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // Pengurus Routes
 Route::middleware(['auth', 'role:pengurus'])->prefix('pengurus')->name('pengurus.')->group(function () {
     Route::get('/dashboard', [PengurusDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/ukm-ormawa/kelola', [ManagedUkmOrmawaController::class, 'editOrCreate'])->name('ukm-ormawa.edit'); // Akan ke create jika belum ada
+    Route::get('/ukm-ormawa/kelola', [ManagedUkmOrmawaController::class, 'editOrCreate'])->name('ukm-ormawa.edit');// Akan ke create jika belum ada
+    Route::get('/ukm-ormawa/buat', [ManagedUkmOrmawaController::class, 'create'])->name('ukm-ormawa.store');
     Route::post('/ukm-ormawa/buat', [ManagedUkmOrmawaController::class, 'store'])->name('ukm-ormawa.store');
     Route::put('/ukm-ormawa/kelola', [ManagedUkmOrmawaController::class, 'update'])->name('ukm-ormawa.update');
     
