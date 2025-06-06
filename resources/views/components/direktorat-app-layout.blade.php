@@ -45,19 +45,10 @@
                 {{-- Tambahkan menu lain sesuai kebutuhan Direktorat --}}
 
                 <div class="border-t border-indigo-700 my-4"></div>
-                <a href="{{ route('settings.index') }}" class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md {{ request()->routeIs('settings.index') ? 'bg-indigo-900 text-white' : 'text-indigo-200 hover:bg-indigo-700 hover:text-white' }}">
+                <a href="{{ route('direktorat.settings.index') }}" class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md {{ request()->routeIs('settings.index') ? 'bg-indigo-900 text-white' : 'text-indigo-200 hover:bg-indigo-700 hover:text-white' }}">
                     <span class="material-icons mr-3 text-base">settings</span>
                     Pengaturan Akun
                 </a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <a href="{{ route('logout') }}"
-                       onclick="event.preventDefault(); this.closest('form').submit();"
-                       class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-indigo-200 hover:bg-red-700 hover:text-white">
-                        <span class="material-icons mr-3 text-base">logout</span>
-                        Logout
-                    </a>
-                </form>
             </nav>
         </aside>
 
@@ -91,7 +82,7 @@
                                     <span class="mt-1 inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">{{ ucfirst(Auth::user()->role) }}</span>
                                 </div>
                                 <div class="border-t border-gray-100"></div>
-                                <a href="{{ route('settings.index') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" @click="profileMenuOpen = false">
+                                <a href="{{ route('direktorat.settings.index') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" @click="profileMenuOpen = false">
                                     <span class="material-icons text-base mr-2 align-middle">manage_accounts</span>Pengaturan Akun
                                 </a>
                                 <div class="border-t border-gray-100"></div>
