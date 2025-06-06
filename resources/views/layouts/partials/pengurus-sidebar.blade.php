@@ -74,14 +74,5 @@
             <span class="material-icons mr-3 text-base">settings</span>
             Pengaturan Akun Saya
         </a>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <a href="{{ route('logout') }}"
-               onclick="event.preventDefault(); this.closest('form').submit();"
-               class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-slate-300 hover:bg-red-700 hover:text-white">
-                <span class="material-icons mr-3 text-base">logout</span>
-                Logout
-            </a>
-        </form>
     </nav>
 </aside>
