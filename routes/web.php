@@ -19,11 +19,13 @@ use App\Http\Controllers\Pengurus\PengurusDashboardController;
 use App\Http\Controllers\Pengurus\ManagedUkmOrmawaController;
 use App\Http\Controllers\Pengurus\MemberManagementController;
 use App\Http\Controllers\Pengurus\ActivityManagementController as PengurusActivityController;
+use App\Http\Controllers\Pengurus\PengurusSettingsController;
 
 use App\Http\Controllers\ActivityController; // Untuk publik dan pendaftaran kegiatan
 
 use App\Http\Controllers\Direktorat\DirektoratDashboardController;
 use App\Http\Controllers\Direktorat\UkmManagementController;
+use App\Http\Controllers\Direktorat\DirektoratSettingsController;
 
 // Auth Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -69,6 +71,12 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/articles', [ArticleController::class, 'index'])->name('index'); // admin.index
     Route::resource('articles', ArticleController::class)->except(['index', 'show']); // Menggunakan resource untuk CRUD lain
+
+    // Pengaturan Akun
+    Route::get('/pengaturan', [SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/pengaturan/profil', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::post('/pengaturan/password', [SettingsController::class, 'updatePassword'])->name('settings.password.update');
+    Route::delete('/pengaturan/akun', [SettingsController::class, 'deleteAccount'])->name('settings.account.delete');
 });
 
 // Pengurus Routes
@@ -84,6 +92,12 @@ Route::middleware(['auth', 'role:pengurus'])->prefix('pengurus')->name('pengurus
     
     Route::resource('activities', PengurusActivityController::class)->except(['show']);
     Route::get('/attendance-reports', [PengurusActivityController::class, 'attendanceReport'])->name('attendance.reports');
+
+    // Pengaturan Akun
+    Route::get('/pengaturan', [PengurusSettingsController::class, 'index'])->name('settings.index');
+    Route::post('/pengaturan/profil', [PengurusSettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::post('/pengaturan/password', [PengurusSettingsController::class, 'updatePassword'])->name('settings.password.update');
+    Route::delete('/pengaturan/akun', [PengurusSettingsController::class, 'deleteAccount'])->name('settings.account.delete');
 });
 
 // Direktorat Routes
@@ -95,6 +109,12 @@ Route::middleware(['auth', 'role:direktorat'])->prefix('direktorat')->name('dire
     Route::get('/ukm-ormawa/{ukmOrmawa}/edit', [UkmManagementController::class, 'edit'])->name('ukm-ormawa.edit');
     Route::put('/ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'update'])->name('ukm-ormawa.update');
     Route::delete('/ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'destroy'])->name('ukm-ormawa.destroy');
+
+    // Pengaturan Akun
+    Route::get('/pengaturan', [DirektoratSettingsController::class, 'index'])->name('settings.index');
+    Route::post('/pengaturan/profil', [DirektoratSettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::post('/pengaturan/password', [DirektoratSettingsController::class, 'updatePassword'])->name('settings.password.update');
+    Route::delete('/pengaturan/akun', [DirektoratSettingsController::class, 'deleteAccount'])->name('settings.account.delete');
 });
 
 // Proxy API GoAPI Regional (jika diletakkan di web.php)
