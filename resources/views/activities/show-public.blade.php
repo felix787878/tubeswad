@@ -117,8 +117,7 @@
                             <span class="material-icons ml-2">how_to_reg</span>
                         </button>
                     </form>
-                @elseif ($activity->date_start->isPast()) {{-- PERUBAHAN DI SINI: Menggunakan objek Carbon langsung --}}
-                     <div class="mb-6 p-3 bg-gray-100 border border-gray-300 text-gray-600 rounded-md text-sm">
+@elseif (($activity->date_end ?? $activity->date_start)->isPast())                     <div class="mb-6 p-3 bg-gray-100 border border-gray-300 text-gray-600 rounded-md text-sm">
                         Kegiatan ini telah selesai.
                     </div>
                 @else

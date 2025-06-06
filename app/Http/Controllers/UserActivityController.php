@@ -29,6 +29,8 @@ class UserActivityController extends Controller
                                         ->orderBy('date_start', 'asc') 
                                         ->get();
 
+        // --- PERUBAHAN DIMULAI DI SINI ---
+
         $today = Carbon::today();
         $upcoming_activities = [];
         $past_activities = [];
@@ -36,24 +38,19 @@ class UserActivityController extends Controller
         foreach ($allPublishedActivities as $activity) {
             $isRegistered = in_array($activity->id, $joinedActivityIds);
             
-            $statusKeikutsertaan = 'Lihat Detail'; 
-            if ($isRegistered) {
-                $statusKeikutsertaan = $participationDetails[$activity->id] ?? 'Terdaftar';
-            }
+            $statusKeikutsertaan = $isRegistered ? ($participationDetails[$activity->id] ?? 'Terdaftar') : 'Lihat Detail';
 
             $registrationIsOpenForThisActivity = $activity->is_registration_open &&
-                                  (!$activity->registration_deadline_activity || Carbon::parse($activity->registration_deadline_activity)->endOfDay()->isFuture());
+                                  (!$activity->registration_deadline_activity || $activity->registration_deadline_activity->isFuture());
 
-            // Perbaiki pengecekan isActivityUpcoming
-            $activityEndDate = $activity->date_end ? Carbon::parse($activity->date_end) : Carbon::parse($activity->date_start);
-            $isActivityUpcoming = $activityEndDate->endOfDay()->isAfter($today) || $activityEndDate->endOfDay()->isToday();
-
+            // Gunakan tanggal akhir jika ada, jika tidak gunakan tanggal mulai
+            $activityEffectiveEndDate = $activity->date_end ?? $activity->date_start;
+            $isActivityUpcoming = !$activityEffectiveEndDate->isPast();
 
             $activityData = (object)[
                 'id' => $activity->id,
                 'name' => $activity->name,
                 'organizer' => $activity->ukmOrmawa->name ?? 'Penyelenggara Tidak Diketahui',
-                'date_start_obj' => $activity->date_start, 
                 'date_start' => $activity->date_start->format('Y-m-d'),
                 'date_end' => $activity->date_end ? $activity->date_end->format('Y-m-d') : $activity->date_start->format('Y-m-d'),
                 'time_start' => $activity->time_start,
@@ -77,6 +74,8 @@ class UserActivityController extends Controller
                 }
             }
         }
+        
+        // --- PERUBAHAN SELESAI DI SINI ---
         
         usort($past_activities, function($a, $b) {
              return strcmp($b->date_start, $a->date_start);
