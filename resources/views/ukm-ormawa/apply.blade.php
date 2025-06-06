@@ -1,7 +1,4 @@
-{{-- jibi/resources/views/ukm-ormawa/apply.blade.php --}}
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="container mx-auto">
     {{-- Tombol Kembali --}}
     <div class="mb-6">
@@ -311,4 +308,4 @@
     });
 </script>
 @endpush
-@endsection
+</x-app-layout>

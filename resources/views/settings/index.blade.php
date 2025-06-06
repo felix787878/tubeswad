@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
     <div class="mb-6">
         <h1 class="text-3xl font-semibold text-gray-800">Pengaturan Akun</h1>
         <p class="text-gray-600 mt-1">Kelola informasi profil, keamanan, dan preferensi akun Anda.</p>
@@ -145,4 +143,4 @@
             }, 300); // Waktu untuk transisi opacity
         }, 5000); // Notifikasi hilang setelah 5 detik
     </script>
-@endsection
+</x-app-layout>

@@ -41,12 +41,12 @@
                             {{-- Tanggal Mulai & Selesai --}}
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="date_start" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai <span class="text-red-500">*</span></label>
+                                    <label for="date_start" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai Kegiatan<span class="text-red-500">*</span></label>
                                     <input type="date" name="date_start" id="date_start" value="{{ old('date_start') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3">
                                     @error('date_start') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <label for="date_end" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai (Opsional)</label>
+                                    <label for="date_end" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Selesai Kegiatan (Opsional)</label>
                                     <input type="date" name="date_end" id="date_end" value="{{ old('date_end') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3">
                                     @error('date_end') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
                                 </div>
@@ -91,13 +91,33 @@
                                 @error('image_banner') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
                             </div>
 
-                            {{-- Status Publikasi --}}
+                            {{-- Status Publikasi Kegiatan --}}
                             <div class="mt-4">
                                 <label for="is_published" class="inline-flex items-center">
-                                    <input id="is_published" type="checkbox" name="is_published" value="1" {{ old('is_published') ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                    <input id="is_published" type="checkbox" name="is_published" value="1" {{ old('is_published', true) ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                     <span class="ml-2 text-sm text-gray-700">Publikasikan Kegiatan Ini</span>
                                 </label>
-                                <p class="text-xs text-gray-500 mt-1">Jika dicentang, kegiatan akan langsung terlihat oleh publik/mahasiswa. Biarkan tidak dicentang untuk menyimpannya sebagai draft.</p>
+                                <p class="text-xs text-gray-500 mt-1">Jika dicentang, kegiatan akan terlihat oleh publik/mahasiswa. Biarkan tidak dicentang untuk menyimpannya sebagai draft.</p>
+                            </div>
+
+                            {{-- PENGATURAN PENDAFTARAN KEGIATAN --}}
+                            <div class="mt-6 pt-4 border-t border-gray-200">
+                                <h3 class="text-md font-semibold text-gray-700 mb-2">Pengaturan Pendaftaran untuk Kegiatan Ini</h3>
+                                <div class="mt-4">
+                                    <label for="is_registration_open" class="inline-flex items-center">
+                                        <input id="is_registration_open" type="checkbox" name="is_registration_open" value="1" {{ old('is_registration_open') ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" onchange="toggleDeadlineActivity(this.checked)">
+                                        <span class="ml-2 text-sm text-gray-700">Buka Pendaftaran untuk Kegiatan Ini</span>
+                                    </label>
+                                    <p class="text-xs text-gray-500 mt-1">Jika dicentang, mahasiswa dapat mendaftar untuk mengikuti kegiatan ini (jika kegiatan juga dipublikasikan).</p>
+                                    @error('is_registration_open') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
+                                </div>
+
+                                <div id="deadline_activity_container" class="{{ old('is_registration_open') ? '' : 'hidden' }} mt-4">
+                                    <label for="registration_deadline_activity" class="block text-sm font-medium text-gray-700 mb-1">Batas Akhir Pendaftaran Kegiatan</label>
+                                    <input type="datetime-local" name="registration_deadline_activity" id="registration_deadline_activity" value="{{ old('registration_deadline_activity') }}" class="mt-1 block w-full md:w-2/3 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:text-sm py-2.5 px-3">
+                                    <p class="text-xs text-gray-500 mt-1">Tanggal dan waktu terakhir mahasiswa bisa mendaftar. Kosongkan jika tidak ada batas waktu. Wajib diisi jika pendaftaran dibuka.</p>
+                                    @error('registration_deadline_activity') <span class="text-xs text-red-600 mt-1">{{ $message }}</span> @enderror
+                                </div>
                             </div>
                         </div>
 
@@ -130,6 +150,23 @@
                 previewContainer.classList.add('hidden');
             }
         }
+
+        function toggleDeadlineActivity(isRegistrationOpen) {
+            const deadlineContainer = document.getElementById('deadline_activity_container');
+            const deadlineInput = document.getElementById('registration_deadline_activity');
+            if (isRegistrationOpen) {
+                deadlineContainer.classList.remove('hidden');
+            } else {
+                deadlineContainer.classList.add('hidden');
+                deadlineInput.value = ''; 
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const registrationCheckbox = document.getElementById('is_registration_open');
+            if (registrationCheckbox) {
+                 toggleDeadlineActivity(registrationCheckbox.checked);
+            }
+        });
     </script>
     @endpush
 </x-pengurus-app-layout>

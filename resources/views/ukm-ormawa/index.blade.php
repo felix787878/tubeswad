@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
     <div class="mb-6">
         <h1 class="text-3xl font-semibold text-gray-800">Daftar UKM & Ormawa</h1>
         <p class="text-gray-600 mt-1">Temukan Unit Kegiatan Mahasiswa dan Organisasi Mahasiswa yang sesuai dengan minat dan bakat Anda di Telkom University.</p>
@@ -140,7 +138,6 @@
         </div>
     @endif
 
-@endsection
 
 @push('scripts')
 <script>
@@ -161,3 +158,4 @@
     });
 </script>
 @endpush
+</x-app-layout>

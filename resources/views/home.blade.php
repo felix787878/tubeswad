@@ -1,8 +1,4 @@
-{{-- resources/views/home.blade.php --}}
-@extends('layouts.app')
-
-@section('content')
-    {{-- Salam Pengguna --}}
+<x-app-layout>
     <div class="mb-8 p-6 bg-gradient-to-r from-red-600 to-red-800 text-white rounded-xl shadow-lg flex items-center justify-between">
         <div>
             <h1 class="text-3xl font-bold">Halo, {{ Auth::user()->name ?? 'Mahasiswa Teladan' }}!</h1>
@@ -11,7 +7,7 @@
         <span class="material-icons text-6xl text-white opacity-50 transform -rotate-12 hidden sm:block">dashboard_customize</span>
     </div>
 
-    {{-- Notifikasi Sesi (Sudah ada dan baik) --}}
+    {{-- Notifikasi Sesi --}}
     @if(session('error') || session('success') || session('warning'))
         @php
             $type = session('error') ? 'error' : (session('success') ? 'success' : 'warning');
@@ -33,47 +29,13 @@
     {{-- Grid Utama Dashboard --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
-            {{-- PENGUMUMAN TERBARU (DINAMIS) --}}
-            <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-gray-800">Pengumuman Terbaru</h2>
-                    {{-- Arahkan ke halaman daftar semua artikel/pengumuman jika ada --}}
-                    <a href="{{ route('articles.show', ['article' => '#']) }}" {{-- Ganti '#' dengan slug/ID halaman semua artikel --}}
-                       class="text-sm text-red-600 hover:text-red-800 font-medium flex items-center">
-                        Lihat Semua <span class="material-icons text-base ml-1">arrow_forward</span>
-                    </a>
-                </div>
-                <div class="space-y-5">
-                    @forelse ($announcements as $announcement)
-                        @php
-                            // Contoh sederhana untuk warna strip berdasarkan ID atau kategori
-                            // Anda bisa membuat logika yang lebih baik, misal berdasarkan kategori pengumuman
-                            $type_colors = ['bg-red-500', 'bg-blue-500', 'bg-yellow-500', 'bg-green-500', 'bg-purple-500'];
-                            $type_color = $type_colors[$loop->index % count($type_colors)];
-                        @endphp
-                        <div class="flex items-start space-x-4 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <div class="flex-shrink-0 w-2 h-12 rounded-full {{ $type_color }} mt-1"></div>
-                            <div>
-                                <p class="text-xs text-gray-500">
-                                    {{ $announcement->created_at->translatedFormat('d M, H:i') }}
-                                    @if($announcement->user) {{-- Asumsi artikel punya relasi ke user pembuat --}}
-                                      - Oleh: {{ strtoupper($announcement->user->name) }}
-                                    @endif
-                                </p>
-                                <a href="{{ route('articles.show', $announcement->id) }}" class="text-base font-medium text-gray-700 hover:text-indigo-600 block">{{ $announcement->title }}</a>
-                            </div>
-                        </div>
-                    @empty
-                        <p class="text-gray-500 text-center py-4">Belum ada pengumuman terbaru.</p>
-                    @endforelse
-                </div>
-            </div>
+            {{-- BAGIAN PENGUMUMAN DIHAPUS DARI SINI --}}
 
             {{-- PENDAFTARAN SEDANG DIBUKA (DINAMIS) --}}
             <div>
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-semibold text-gray-800">Pendaftaran Sedang Dibuka</h2>
-                     <a href="{{ route('ukm-ormawa.index') }}" {{-- Atau route khusus untuk registration openings --}}
+                     <a href="{{ route('ukm-ormawa.index') }}"
                         class="text-sm text-red-600 hover:text-red-800 font-medium flex items-center">
                         Lihat Semua yang Buka <span class="material-icons text-base ml-1">arrow_forward</span>
                     </a>
@@ -116,7 +78,7 @@
         <div class="lg:col-span-1 space-y-6">
             <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">UKM/Ormawa Saya</h2>
-                <div class="flex-grow space-y-3 overflow-y-auto pr-1" style="max-height: 300px;"> {{-- Atur max-height jika daftar panjang --}}
+                <div class="flex-grow space-y-3 overflow-y-auto pr-1" style="max-height: 300px;">
                     @if ($joinedUkms->isEmpty())
                         <div class="flex flex-col items-center justify-center h-full text-center">
                              <span class="material-icons text-5xl text-gray-300 mb-2">group_add</span>
@@ -147,40 +109,9 @@
             </div>
         </div>
     </div>
+    
+    {{-- BAGIAN BERITA & INFORMASI TERKINI JUGA DIHAPUS --}}
 
-    {{-- Bagian Artikel Berita Utama (Jika masih digunakan) --}}
-    <div class="mt-12">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Berita & Informasi Terkini</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @forelse ($articles as $article)
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                    @if($article->image)
-                        <a href="{{ route('articles.show', $article->id) }}">
-                            <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="w-full h-48 object-cover">
-                        </a>
-                    @endif
-                    <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2 hover:text-red-700 transition-colors">
-                            <a href="{{ route('articles.show', $article->id) }}">{{ $article->title }}</a>
-                        </h3>
-                        <p class="text-xs text-gray-500 mb-1">
-                            Oleh {{ $article->user->name ?? 'Admin' }} - {{ $article->created_at->translatedFormat('d M Y') }}
-                        </p>
-                        <p class="text-gray-700 text-sm leading-relaxed mb-4">
-                            {{ Str::limit(strip_tags($article->content), 100) }}
-                        </p>
-                        <a href="{{ route('articles.show', $article->id) }}" class="text-red-600 hover:text-red-800 font-medium text-sm flex items-center">
-                            Baca Selengkapnya <span class="material-icons text-sm ml-1">arrow_forward</span>
-                        </a>
-                    </div>
-                </div>
-            @empty
-                <p class="md:col-span-2 lg:col-span-3 text-center text-gray-500 py-8">Belum ada artikel yang dipublikasikan.</p>
-            @endforelse
-        </div>
-    </div>
-
-@endsection
 
 @push('scripts')
 <script>
@@ -192,7 +123,7 @@
                     element.style.transition = 'opacity 0.3s ease-out';
                     element.style.opacity = '0';
                     setTimeout(() => element.style.display = 'none', 300);
-                }, 7000); // Notifikasi hilang setelah 7 detik
+                }, 7000);
             }
         }
         fadeOutAndHide('successMessageDashboard');
@@ -201,3 +132,4 @@
     });
 </script>
 @endpush
+</x-app-layout>

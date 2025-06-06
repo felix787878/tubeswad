@@ -36,14 +36,15 @@ class MemberManagementController extends Controller
             });
         }
 
-        $applications = $query->orderBy('created_at', 'desc')->paginate(15); // Misalnya 15 per halaman
+        $applications = $query->orderBy('created_at', 'desc')->paginate(10);
 
-        // Statistik
-        $stats = [
-            'approved' => UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)->where('status', 'approved')->count(),
-            'pending' => UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)->where('status', 'pending')->count(),
-            'rejected' => UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)->where('status', 'rejected')->count(),
-        ];
+// Statistik
+$stats = [
+    'approved' => UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)->where('status', 'approved')->count(),
+    'pending' => UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)->where('status', 'pending')->count(),
+    'rejected' => UkmApplication::where('ukm_ormawa_id', $ukmOrmawa->id)->where('status', 'rejected')->count(),
+];
+        
 
         return view('pengurus.members.index', compact('ukmOrmawa', 'applications', 'stats'));
     }

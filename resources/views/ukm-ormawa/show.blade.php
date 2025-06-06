@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
 <div class="container mx-auto">
     @if(isset($item))
         {{-- Tombol Kembali --}}
@@ -206,7 +204,6 @@
         </div>
     @endif
 </div>
-@endsection
 
 @push('scripts')
 <script>
@@ -240,3 +237,4 @@
     });
 </script>
 @endpush
+</x-app-layout>

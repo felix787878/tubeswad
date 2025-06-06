@@ -13,10 +13,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $announcements = Article::where('is_published', true)
-                                ->latest()
-                                ->take(3)
-                                ->get();
+       // $announcements = Article::where('is_published', true)
+                                //->latest()
+                                //->take(3)
+                                //->get();
 
         $openRegistrations = UkmOrmawa::where('status', 'approved') // <-- TAMBAHKAN CEK STATUS
                                       ->where('is_registration_open', true)
@@ -51,11 +51,11 @@ class HomeController extends Controller
                                        })->filter();
         }
         
-        $articles = Article::where('is_published', true) 
-                           ->latest()
-                           ->take(5)
-                           ->get();
+        //$articles = Article::where('is_published', true) 
+                           //->latest()
+                           //->take(5)
+                          // ->get();
 
-        return view('home', compact('announcements', 'openRegistrations', 'joinedUkms', 'articles'));
+        return view('home', compact( 'openRegistrations', 'joinedUkms'));
     }
 }
