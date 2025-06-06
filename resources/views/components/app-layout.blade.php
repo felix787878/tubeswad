@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-gray-100">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,18 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        .sidebar-scroll::-webkit-scrollbar { width: 6px; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,0.3); border-radius: 3px; }
-        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
-    </style>
 </head>
-<body class="h-full font-inter">
-    <div x-data="{ sidebarOpen: false }" class="min-h-screen flex">
+<body class="font-inter">
+    {{-- Kontainer utama diubah di sini --}}
+    <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-100">
         {{-- Sidebar --}}
         <aside 
             id="sidebar" 
-            class="bg-red-800 text-white w-64 fixed inset-y-0 left-0 top-0 z-40 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 flex-shrink-0 flex flex-col sidebar-scroll"
+            class="bg-red-800 text-white w-64 fixed inset-y-0 left-0 top-0 z-40 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 flex-shrink-0 flex flex-col"
             :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}"
             @click.away="sidebarOpen = false">
             {{-- Logo di Sidebar --}}
@@ -30,7 +26,7 @@
                 </a>
             </div>
             {{-- Navigasi Sidebar --}}
-            <nav class="flex-1 pt-2 pb-4 px-2 space-y-1 overflow-y-auto">
+            <nav class="flex-1 pt-2 pb-4 px-2 space-y-1 overflow-y-auto sidebar-scroll">
                 <a href="{{ route('home') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-red-700 {{ request()->routeIs('home') ? 'bg-red-900' : '' }}">
                     <span class="material-icons mr-3">dashboard</span>
                     Dashboard
@@ -50,9 +46,9 @@
             </nav>
         </aside>
 
-        {{-- Main Content Area --}}
-        <div class="flex-1 flex flex-col">
-            {{-- Header --}}
+        {{-- Main Content Area (Struktur ini tetap sama) --}}
+        <div class="flex-1 flex flex-col overflow-hidden">
+             {{-- Header --}}
             <header class="bg-white text-gray-700 shadow-md z-10 sticky top-0">
                 <div class="container-fluid mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center justify-between h-16">
@@ -97,11 +93,9 @@
                     </div>
                 </div>
             </header>
-
-            {{-- Area Konten Utama --}}
-            <main class="flex-grow">
+            <main class="flex-grow overflow-y-auto">
                 <div class="container mx-auto px-6 py-8">
-                    {{ $slot }} {{-- Ganti @yield('content') dengan ini --}}
+                    {{ $slot }}
                 </div>
             </main>
         </div>
