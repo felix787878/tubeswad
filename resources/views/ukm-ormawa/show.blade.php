@@ -132,6 +132,87 @@
                         @endif
                     </div>
 
+                    <div id="lokasi" class="pt-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Lokasi Kami</h3>
+
+                        {{-- Cek apakah data alamat lengkap ada --}}
+                        @if($item->alamat_lengkap)
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                
+                                <!-- Kolom Informasi Alamat -->
+                                <div class="space-y-4">
+                                    <div>
+                                        <h4 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Alamat</h4>
+                                        <p class="text-lg text-gray-800 mt-1">
+                                            {{-- Menampilkan alamat lengkap yang sudah diformat --}}
+                                            {{ $item->alamat_lengkap }}
+                                        </p>
+                                    </div>
+                                    
+                                    {{-- Menampilkan detail alamat terstruktur --}}
+                                    <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                                        <div class="text-gray-600">Provinsi:</div>
+                                        <div class="font-medium text-gray-800">{{ $item->provinsi }}</div>
+
+                                        <div class="text-gray-600">Kab./Kota:</div>
+                                        <div class="font-medium text-gray-800">{{ $item->kabkota }}</div>
+
+                                        <div class="text-gray-600">Kecamatan:</div>
+                                        <div class="font-medium text-gray-800">{{ $item->kecamatan }}</div>
+
+                                        <div class="text-gray-600">Desa/Kel.:</div>
+                                        <div class="font-medium text-gray-800">{{ $item->desakel }}</div>
+                                    </div>
+
+                                    {{-- Tombol untuk membuka di Google Maps --}}
+                                    @if($item->google_maps_link)
+                                        <div class="pt-4">
+                                            <a href="{{ $item->google_maps_link }}" 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold text-sm rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200">
+                                            <span class="material-icons mr-2">place</span>
+                                                Buka di Google Maps
+                                            </a>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Kolom Peta Sematan (Embedded Map) -->
+                                <!-- <div>
+                                    @if($ukmOrmawa->google_maps_link)
+                                        @php
+                                            // Logika sederhana untuk mengubah link share menjadi link embed
+                                            $embedUrl = str_replace('/maps/place/', '/maps/embed/v1/place?key=YOUR_API_KEY&q=', $ukmOrmawa->google_maps_link);
+                                            // Jika format link berbeda (e.g., maps.app.goo.gl), diperlukan parsing yang lebih kompleks
+                                            // Untuk contoh ini kita asumsikan format standar
+                                        @endphp
+                                        <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden border border-gray-300">
+                                            {{-- Ganti YOUR_API_KEY dengan Google Maps API Key Anda --}}
+                                            <iframe
+                                                src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=Universitas%20Telkom%2C%20Bandung"
+                                                width="100%"
+                                                height="100%"
+                                                style="border:0;"
+                                                allowfullscreen=""
+                                                loading="lazy"
+                                                referrerpolicy="no-referrer-when-downgrade">
+                                            </iframe>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-2">Peta mungkin tidak menampilkan lokasi yang 100% akurat.</p>
+                                    @else
+                                        <div class="h-full flex items-center justify-center bg-gray-100 rounded-lg">
+                                            <p class="text-gray-500">Peta tidak tersedia.</p>
+                                        </div>
+                                    @endif
+                                </div> -->
+
+                            </div>
+                        @else
+                            <p class="text-gray-500">Informasi lokasi untuk UKM ini belum tersedia.</p>
+                        @endif
+                    </div>
+
                     <div id="content-kegiatan" class="tab-detail-content hidden">
                         <h2 class="text-2xl font-semibold text-gray-800 mt-0 mb-4">Kegiatan Utama</h2>
                         {{-- Anda perlu memuat data kegiatan dari relasi atau query terpisah --}}
