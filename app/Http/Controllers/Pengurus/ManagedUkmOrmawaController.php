@@ -64,7 +64,6 @@ class ManagedUkmOrmawaController extends Controller
             'category' => 'required|string|max:255',
             'logo_url_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'banner_url_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
-            'description_short' => 'nullable|string|max:500',
             'description_full' => 'nullable|string',
             'visi' => 'nullable|string',
             'misi_input' => 'nullable|string',
@@ -145,7 +144,6 @@ class ManagedUkmOrmawaController extends Controller
             'contact_instagram' => 'nullable|string|max:255',
             'is_registration_open' => 'nullable|boolean',
             'registration_deadline' => 'nullable|date',
-
             'alamat_lengkap' => 'required|string|max:255',
             'provinsi' => 'required|string|max:255',
             'kabkota' => 'required|string|max:255',
@@ -181,9 +179,8 @@ class ManagedUkmOrmawaController extends Controller
         unset($dataToCreate['misi_input'], $dataToCreate['logo_url_file'], $dataToCreate['banner_url_file']);
 
         // 5. Simpan UKM dan hubungkan ke user yang sedang login
-        $ukmOrmawa = Auth::user()->managesUkmOrmawa()->create($dataToCreate);
+        $ukmOrmawa = Auth::user()->createdUkmOrmawa()->create($dataToCreate);
 
         return redirect()->route('pengurus.ukm-ormawa.edit')->with('success', 'Profil UKM/Ormawa berhasil dibuat dan diajukan untuk verifikasi.');
     }
-
 }

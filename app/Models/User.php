@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function managesUkmOrmawa()
     {
-        return $this->belongsTo(UkmOrmawa::class, 'manages_ukm_ormawa_id');
+        return $this->belongsTo(UkmOrmawa::class, 'pengurus_id');
     }
 
     public function ukmApplications()
@@ -60,8 +60,8 @@ class User extends Authenticatable
         return $this->hasMany(UkmApplication::class);
     }
 
-    public function createdUkmOrmawas()
+    public function createdUkmOrmawa()
     {
-        return $this->hasMany(UkmOrmawa::class, 'pengurus_id');
+        return $this->hasOne(UkmOrmawa::class, 'pengurus_id');
     }
 }

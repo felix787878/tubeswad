@@ -3,25 +3,25 @@
         {{ __('Dashboard Pengurus') }}
     </x-slot>
 
-    @if (Auth::user()->managesUkmOrmawa)
+    @if (Auth::user()->createdUkmOrmawa)
         {{-- Tampilan jika pengurus SUDAH punya UKM/Ormawa --}}
         <div class="space-y-6">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <h3 class="text-2xl font-semibold text-gray-800">
-                    Selamat Datang, Pengurus {{ Auth::user()->managesUkmOrmawa->name }}!
+                    Selamat Datang, Pengurus {{ Auth::user()->createdUkmOrmawa->name }}!
                 </h3>
-                <p class="text-gray-600">Ini adalah halaman utama untuk mengelola {{ Auth::user()->managesUkmOrmawa->name }}.</p>
-                 @if(Auth::user()->managesUkmOrmawa->status == 'pending_verification')
+                <p class="text-gray-600">Ini adalah halaman utama untuk mengelola {{ Auth::user()->createdUkmOrmawa->name }}.</p>
+                 @if(Auth::user()->createdUkmOrmawa->status == 'pending_verification')
                     <div class="mt-4 p-3 bg-yellow-100 text-yellow-700 border border-yellow-300 rounded-md text-sm">
-                        <span class="font-semibold">Perhatian:</span> Profil UKM/Ormawa Anda (<span class="font-medium">{{ Auth::user()->managesUkmOrmawa->name }}</span>) sedang menunggu verifikasi dari Admin Direktorat. Fitur publik mungkin belum aktif sampai disetujui.
+                        <span class="font-semibold">Perhatian:</span> Profil UKM/Ormawa Anda (<span class="font-medium">{{ Auth::user()->createdUkmOrmawa->name }}</span>) sedang menunggu verifikasi dari Admin Direktorat. Fitur publik mungkin belum aktif sampai disetujui.
                     </div>
-                @elseif(Auth::user()->managesUkmOrmawa->status == 'needs_update')
+                @elseif(Auth::user()->createdUkmOrmawa->status == 'needs_update')
                     <div class="mt-4 p-3 bg-orange-100 text-orange-700 border border-orange-300 rounded-md text-sm">
-                        <span class="font-semibold">Perhatian:</span> Profil UKM/Ormawa Anda (<span class="font-medium">{{ Auth::user()->managesUkmOrmawa->name }}</span>) memerlukan revisi. Silakan periksa catatan dari Admin Direktorat dan perbarui profil Anda.
+                        <span class="font-semibold">Perhatian:</span> Profil UKM/Ormawa Anda (<span class="font-medium">{{ Auth::user()->createdUkmOrmawa->name }}</span>) memerlukan revisi. Silakan periksa catatan dari Admin Direktorat dan perbarui profil Anda.
                     </div>
-                 @elseif(Auth::user()->managesUkmOrmawa->status == 'rejected')
+                 @elseif(Auth::user()->createdUkmOrmawa->status == 'rejected')
                     <div class="mt-4 p-3 bg-red-100 text-red-700 border border-red-300 rounded-md text-sm">
-                        <span class="font-semibold">Informasi:</span> Pengajuan profil UKM/Ormawa Anda (<span class="font-medium">{{ Auth::user()->managesUkmOrmawa->name }}</span>) sebelumnya telah ditolak. Anda dapat mencoba mengajukan kembali dengan membuat profil baru jika diperlukan atau hubungi Admin Direktorat.
+                        <span class="font-semibold">Informasi:</span> Pengajuan profil UKM/Ormawa Anda (<span class="font-medium">{{ Auth::user()->createdUkmOrmawa->name }}</span>) sebelumnya telah ditolak. Anda dapat mencoba mengajukan kembali dengan membuat profil baru jika diperlukan atau hubungi Admin Direktorat.
                     </div>
                 @endif
             </div>

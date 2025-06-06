@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('ukm_ormawas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->unique()->constrained()->onDelete('cascade');
             $table->string('name')->unique();
             $table->string('slug')->unique();
             $table->enum('type', ['UKM', 'Ormawa']);
@@ -23,9 +24,7 @@ return new class extends Migration
             $table->string('contact_email')->nullable();
             $table->string('contact_instagram')->nullable();
             $table->boolean('is_registration_open')->default(false);
-            $table->date('registration_deadline')->nullable(); // Menggunakan tipe date untuk deadline
-            // Kolom ini akan kita tambahkan nanti setelah tabel users dimodifikasi
-            // $table->foreignId('pengurus_user_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->date('registration_deadline')->nullable();
             $table->timestamps();
         });
     }

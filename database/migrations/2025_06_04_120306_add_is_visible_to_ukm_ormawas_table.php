@@ -23,8 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('ukm_ormawas', function (Blueprint $table) {
-            $table->dropColumn('is_visible');
-        });
+        // Schema::table('ukm_ormawas', function (Blueprint $table) {
+        //     $table->dropColumn('is_visible');
+        // });
     }
 };

@@ -23,7 +23,7 @@ return new class extends Migration
         Schema::table('ukm_ormawas', function (Blueprint $table) {
             $table->dropColumn('status');
             // Jika Anda menghapus is_visible, tambahkan kembali di sini untuk rollback yang benar
-            // $table->boolean('is_visible')->default(false)->after('registration_deadline');
+            $table->boolean('is_visible')->default(false)->after('registration_deadline');
         });
     }
 };

@@ -4,7 +4,7 @@
     @click.away="sidebarOpen = false">
     <div class="flex items-center justify-center mt-8 px-4">
         <div class="flex flex-col items-center">
-            @php $currentUkmOrmawa = Auth::user()->managesUkmOrmawa; @endphp {{-- Ambil dari Auth User langsung --}}
+            @php $currentUkmOrmawa = Auth::user()->createdUkmOrmawa; @endphp {{-- Ambil dari Auth User langsung --}}
 
             @if($currentUkmOrmawa && $currentUkmOrmawa->logo_url)
                 <img src="{{ asset('storage/' . $currentUkmOrmawa->logo_url) }}" alt="{{ $currentUkmOrmawa->name }} Logo" class="w-20 h-20 mx-auto rounded-full mb-2 object-cover border-2 border-slate-500 shadow-md">
