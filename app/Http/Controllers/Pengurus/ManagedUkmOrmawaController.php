@@ -51,6 +51,12 @@ class ManagedUkmOrmawaController extends Controller
             'misi_input' => 'nullable|string',
             'contact_email' => 'nullable|email|max:255',
             'contact_instagram' => 'nullable|string|max:255',
+            'alamat_lengkap' => 'required|string|max:255',
+            'provinsi' => 'required|string|max:255',
+            'kabkota' => 'required|string|max:255',
+            'kecamatan' => 'required|string|max:255',
+            'desakel' => 'required|string|max:255',
+            'Maps_link' => 'nullable|url|max:255',
         ]);
 
         $dataToCreate = $validated; // Inisialisasi $dataToCreate dengan hasil validasi
