@@ -72,14 +72,11 @@ class ManagedUkmOrmawaController extends Controller
             'contact_instagram' => 'nullable|string|max:255',
             'is_registration_open' => 'nullable|boolean',
             'registration_deadline' => 'nullable|date',
-            
-            // PERBAIKAN: Validasi untuk field alamat
             'alamat_lengkap' => 'required|string|max:255',
             'provinsi' => 'required|string|max:255',
             'kabkota' => 'required|string|max:255',
             'kecamatan' => 'required|string|max:255',
             'desakel' => 'required|string|max:255',
-            // PERBAIKAN: Nama field disesuaikan menjadi 'google_maps_link'
             'google_maps_link' => 'nullable|url|max:255',
         ]);
 

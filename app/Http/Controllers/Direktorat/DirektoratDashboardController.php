@@ -19,7 +19,7 @@ class DirektoratDashboardController extends Controller
         // Menghitung jumlah mahasiswa unik yang pernah mendaftar ke salah satu UKM/Ormawa
         $totalPendaftarUkm = UkmApplication::distinct('user_id')->count('user_id'); 
 
-        $recentPendingUkm = UkmOrmawa::where('status', 'pending_verification')
+        $recentPendingUkm = UkmOrmawa::where('status', 'Menunggu Verifikasi')
                                     ->with('pengurus') // Eager load data pengurus
                                     ->orderBy('created_at', 'desc')
                                     ->take(5)

@@ -48,7 +48,7 @@ class DirektoratSettingsController extends Controller
                     $fail('Password saat ini salah.');
                 }
             }],
-            'new_password' => ['required', 'string', Password::min(8)->mixedCase()->numbers()->symbols(), 'confirmed'],
+            'new_password' => ['required', 'string', Password::min(6), 'confirmed'],
         ]);
 
         $user->password = Hash::make($request->new_password);
