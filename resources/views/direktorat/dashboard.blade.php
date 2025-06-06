@@ -99,7 +99,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $ukm->type }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $ukm->pengurus->name ?? 'N/A' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $ukm->created_at->isoFormat('D MMM YY, HH:mm') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $ukm->created_at?->isoFormat('D MMM YY, HH:mm') ?? 'Not Available' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                     <a href="{{ route('direktorat.ukm-ormawa.show', $ukm->id) }}" class="text-indigo-600 hover:text-indigo-900 inline-flex items-center px-3 py-1.5 border border-indigo-300 rounded-md text-xs hover:bg-indigo-50">
                                         <span class="material-icons text-sm mr-1">visibility</span>
