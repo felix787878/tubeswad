@@ -1,4 +1,5 @@
-<x-app-layout>
+@extends('layouts/app-layout')
+@section('content')
     <div class="mb-6">
         <h1 class="text-3xl font-semibold text-gray-800">Daftar Kegiatan Kampus</h1>
         <p class="text-gray-600 mt-1">Jelajahi semua kegiatan menarik yang dipublikasikan oleh UKM & Ormawa.</p>
@@ -175,6 +176,7 @@
             @endif
         </div>
     </div>
+@endsection
 
     <script>
         function showTab(tabName) {
@@ -217,4 +219,3 @@
     });
 </script>
 @endpush
-</x-app-layout>
