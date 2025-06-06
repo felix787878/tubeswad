@@ -180,10 +180,10 @@
 
                                 <!-- Kolom Peta Sematan (Embedded Map) -->
                                 <!-- <div>
-                                    @if($ukmOrmawa->google_maps_link)
+                                    @if($item->google_maps_link)
                                         @php
                                             // Logika sederhana untuk mengubah link share menjadi link embed
-                                            $embedUrl = str_replace('/maps/place/', '/maps/embed/v1/place?key=YOUR_API_KEY&q=', $ukmOrmawa->google_maps_link);
+                                            $embedUrl = str_replace('/maps/place/', '/maps/embed/v1/place?key=YOUR_API_KEY&q=', $item->google_maps_link);
                                             // Jika format link berbeda (e.g., maps.app.goo.gl), diperlukan parsing yang lebih kompleks
                                             // Untuk contoh ini kita asumsikan format standar
                                         @endphp
