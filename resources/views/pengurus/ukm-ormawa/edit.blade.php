@@ -228,104 +228,98 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('location_search');
-    const resultsContainer = document.getElementById('search-results');
-    const spinner = document.getElementById('search-spinner');
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchApiUrl = "{{ route('api.alamat.search') }}";
 
-    // Hidden fields
-    const provinsiInput = document.getElementById('provinsi');
-    const kabkotaInput = document.getElementById('kabkota');
-    const kecamatanInput = document.getElementById('kecamatan');
-    const desakelInput = document.getElementById('desakel');
-    
-    const debounce = (func, delay) => {
-        let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), delay);
+        const searchInput = document.getElementById('location_search');
+        const resultsContainer = document.getElementById('search-results');
+        const spinner = document.getElementById('search-spinner');
+
+        // Hidden fields
+        const provinsiInput = document.getElementById('provinsi');
+        const kabkotaInput = document.getElementById('kabkota');
+        const kecamatanInput = document.getElementById('kecamatan');
+        const desakelInput = document.getElementById('desakel');
+        
+        const debounce = (func, delay) => {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
         };
-    };
 
-    const fetchAddress = async (keyword) => {
-        if (keyword.length < 3) {
-            resultsContainer.innerHTML = '';
-            resultsContainer.classList.add('hidden');
-            return;
-        }
-
-        spinner.classList.remove('hidden');
-        resultsContainer.classList.remove('hidden');
-        resultsContainer.innerHTML = '<div class="p-3 text-sm text-gray-500">Mencari...</div>';
-
-        try {
-            const response = await fetch(`https://alamat.thecloudalert.com/api/cari/index/?keyword=${keyword}`);
-            const data = await response.json();
-
-            spinner.classList.add('hidden');
-            resultsContainer.innerHTML = ''; 
-
-            if (data.status === 200 && data.result.length > 0) {
-                
-                // =================================================================
-                // BAGIAN BARU: Filter duplikat sebelum ditampilkan
-                // =================================================================
-                const uniqueResults = [];
-                const trackedKeys = new Set(); // Menggunakan Set untuk performa yang lebih baik
-
-                data.result.forEach(item => {
-                    // Membuat kunci unik dari kombinasi alamat
-                    const key = `${item.desakel}|${item.kecamatan}|${item.kabkota}|${item.provinsi}`;
-                    
-                    // Jika kunci ini belum pernah ada, tambahkan ke hasil unik
-                    if (!trackedKeys.has(key)) {
-                        trackedKeys.add(key);
-                        uniqueResults.push(item);
-                    }
-                });
-                // =================================================================
-                // AKHIR BAGIAN BARU
-                // =================================================================
-
-                // Cek jika ada hasil setelah difilter
-                if(uniqueResults.length === 0) {
-                    resultsContainer.innerHTML = '<div class="p-3 text-sm text-gray-500">Alamat tidak ditemukan.</div>';
-                    return;
-                }
-
-                // Gunakan hasil yang sudah unik (uniqueResults) untuk ditampilkan
-                uniqueResults.forEach(item => {
-                    const resultItem = document.createElement('div');
-                    resultItem.className = 'p-3 hover:bg-indigo-50 cursor-pointer border-b border-gray-200 text-sm';
-                    
-                    let displayAddress = `${item.desakel}, ${item.kecamatan}, ${item.kabkota}, ${item.provinsi}`;
-                    resultItem.textContent = displayAddress;
-
-                    resultItem.addEventListener('click', () => {
-                        searchInput.value = displayAddress;
-                        provinsiInput.value = item.provinsi;
-                        kabkotaInput.value = item.kabkota;
-                        kecamatanInput.value = item.kecamatan;
-                        desakelInput.value = item.desakel;
-                        resultsContainer.classList.add('hidden');
-                    });
-                    resultsContainer.appendChild(resultItem);
-                });
-
-            } else {
-                resultsContainer.innerHTML = '<div class="p-3 text-sm text-gray-500">Alamat tidak ditemukan.</div>';
+        const fetchAddress = async (keyword) => {
+            if (keyword.length < 3) {
+                resultsContainer.innerHTML = '';
+                resultsContainer.classList.add('hidden');
+                return;
             }
-        } catch (error) {
-            spinner.classList.add('hidden');
-            resultsContainer.innerHTML = '<div class="p-3 text-sm text-red-500">Terjadi kesalahan saat memuat data.</div>';
-            console.error('API Fetch Error:', error);
-        }
-    };
 
-    searchInput.addEventListener('keyup', debounce((e) => {
-        fetchAddress(e.target.value);
-    }, 500)); 
-});
+            spinner.classList.remove('hidden');
+            resultsContainer.classList.remove('hidden');
+            resultsContainer.innerHTML = '<div class="p-3 text-sm text-gray-500">Mencari...</div>';
+
+            try {
+                const response = await fetch(`${searchApiUrl}?keyword=${keyword}`);
+                const data = await response.json();
+
+                spinner.classList.add('hidden');
+                resultsContainer.innerHTML = ''; 
+
+                if (data.status === 200 && data.result.length > 0) {
+                    const uniqueResults = [];
+                    const trackedKeys = new Set(); // Menggunakan Set untuk performa yang lebih baik
+
+                    data.result.forEach(item => {
+                        // Membuat kunci unik dari kombinasi alamat
+                        const key = `${item.desakel}|${item.kecamatan}|${item.kabkota}|${item.provinsi}`;
+                        
+                        // Jika kunci ini belum pernah ada, tambahkan ke hasil unik
+                        if (!trackedKeys.has(key)) {
+                            trackedKeys.add(key);
+                            uniqueResults.push(item);
+                        }
+                    });
+                    // Cek jika ada hasil setelah difilter
+                    if(uniqueResults.length === 0) {
+                        resultsContainer.innerHTML = '<div class="p-3 text-sm text-gray-500">Alamat tidak ditemukan.</div>';
+                        return;
+                    }
+
+                    // Gunakan hasil yang sudah unik (uniqueResults) untuk ditampilkan
+                    uniqueResults.forEach(item => {
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'p-3 hover:bg-indigo-50 cursor-pointer border-b border-gray-200 text-sm';
+                        
+                        let displayAddress = `${item.desakel}, ${item.kecamatan}, ${item.kabkota}, ${item.provinsi}`;
+                        resultItem.textContent = displayAddress;
+
+                        resultItem.addEventListener('click', () => {
+                            searchInput.value = displayAddress;
+                            provinsiInput.value = item.provinsi;
+                            kabkotaInput.value = item.kabkota;
+                            kecamatanInput.value = item.kecamatan;
+                            desakelInput.value = item.desakel;
+                            resultsContainer.classList.add('hidden');
+                        });
+                        resultsContainer.appendChild(resultItem);
+                    });
+
+                } else {
+                    resultsContainer.innerHTML = '<div class="p-3 text-sm text-gray-500">Alamat tidak ditemukan.</div>';
+                }
+            } catch (error) {
+                spinner.classList.add('hidden');
+                resultsContainer.innerHTML = '<div class="p-3 text-sm text-red-500">Terjadi kesalahan saat memuat data.</div>';
+                console.error('API Fetch Error:', error);
+            }
+        };
+
+        searchInput.addEventListener('keyup', debounce((e) => {
+            fetchAddress(e.target.value);
+        }, 500)); 
+    });
 </script>
 @endpush
 </x-pengurus-app-layout>

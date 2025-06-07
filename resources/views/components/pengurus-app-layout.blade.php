@@ -28,7 +28,7 @@
                             <path d="M4 6H20M4 12H20M4 18H11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
-                    <h1 class="text-lg font-semibold text-gray-800">{{ $header ?? (Auth::user()->managesUkmOrmawa->name ?? 'Dashboard Pengurus') }}</h1>
+                    <h1 class="text-lg font-semibold text-gray-800">{{ $header ?? (Auth::user()->createdUkmOrmawa->name ?? 'Dashboard Pengurus') }}</h1>
                     
                     {{-- Dropdown Profil Pengurus --}}
                     {{-- `profileMenuOpen` adalah variabel baru khusus untuk dropdown profil ini --}}

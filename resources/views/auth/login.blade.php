@@ -58,15 +58,15 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            {{-- Input Username (tetap menggunakan 'email' untuk backend Laravel) --}}
+            {{-- Input email --}}
             <div class="mb-5">
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 <div class="relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <span class="material-icons text-gray-400">person_outline</span>
                     </div>
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
-                           placeholder="username" {{-- Sesuai screenshot --}}
+                           placeholder="mahasiswa@email.com"
                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm @error('email') border-red-500 ring-red-500 @enderror">
                 </div>
             </div>

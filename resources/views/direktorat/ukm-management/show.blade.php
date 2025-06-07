@@ -56,7 +56,7 @@
                                 Diajukan oleh: {{ $ukmOrmawa->pengurus->name ?? 'N/A' }} ({{ $ukmOrmawa->pengurus->email ?? 'N/A' }})
                             </div>
                                 <div class="mt-1 text-sm text-gray-500">
-                                Terakhir update profil: {{ $ukmOrmawa->updated_at->isoFormat('D MMMM YYYY, HH:mm') }}
+                                Terakhir update profil: {{ ($ukmOrmawa->updated_at ?? $ukmOrmawa->created_at)->isoFormat('D MMMM YYYY, HH:mm') }}
                             </div>
                         </div>
                     </div>

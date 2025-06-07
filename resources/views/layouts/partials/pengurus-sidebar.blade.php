@@ -4,7 +4,7 @@
     @click.away="sidebarOpen = false">
     <div class="flex items-center justify-center mt-8 px-4">
         <div class="flex flex-col items-center">
-            @php $currentUkmOrmawa = Auth::user()->managesUkmOrmawa; @endphp {{-- Ambil dari Auth User langsung --}}
+            @php $currentUkmOrmawa = Auth::user()->createdUkmOrmawa; @endphp {{-- Ambil dari Auth User langsung --}}
 
             @if($currentUkmOrmawa && $currentUkmOrmawa->logo_url)
                 <img src="{{ asset('storage/' . $currentUkmOrmawa->logo_url) }}" alt="{{ $currentUkmOrmawa->name }} Logo" class="w-20 h-20 mx-auto rounded-full mb-2 object-cover border-2 border-slate-500 shadow-md">
@@ -71,8 +71,9 @@
 
         <div class="border-t border-slate-700 my-4"></div>
         <a href="{{ route('pengurus.settings.index') }}" class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md {{ request()->routeIs('settings.index') ? 'bg-slate-900 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
-            <span class="material-icons mr-3 text-base">settings</span>
-            Pengaturan Akun Saya
+            <span class="material-icons mr-3 text-base">settings</span>
+            Pengaturan Akun Saya
+        </a>
         </a>
     </nav>
 </aside>
