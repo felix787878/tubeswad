@@ -1,6 +1,4 @@
-@extends('layouts.app') {{-- Sesuaikan jika Anda menggunakan layout utama yang berbeda --}}
-
-@section('content')
+<x-app-layout>
 <div class="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
     {{-- Tombol Kembali --}}
     <div class="mb-6">
@@ -161,4 +159,4 @@
     });
 </script>
 @endpush
-@endsection
+</x-app-layout>

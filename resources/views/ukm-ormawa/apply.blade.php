@@ -1,5 +1,4 @@
-@extends('layouts/app-layout')
-@section('content')
+<x-app-layout>
     <div class="container mx-auto">
         {{-- Tombol Kembali --}}
         <div class="mb-6">
@@ -127,14 +126,11 @@
             </form>
         </div>
     </div>
-@endsection
-
-@push('scripts')
-{{-- jibi/resources/views/ukm-ormawa/apply.blade.php --}}
-{{-- ... (bagian HTML tetap sama) ... --}}
 
 @push('scripts')
 <script>
+//     {{-- jibi/resources/views/ukm-ormawa/apply.blade.php --}}
+//     {{-- ... (bagian HTML tetap sama) ... --}}
     // TIDAK PERLU GOAPI_KEY DI SINI LAGI KARENA DIHANDLE BACKEND
     // const GOAPI_KEY = '62ed8eb0-a748-58a2-37fd-eb75a19e'; 
     
@@ -310,3 +306,4 @@
     });
 </script>
 @endpush
+</x-app-layout>

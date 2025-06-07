@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('activity_id')->constrained('activities')->onDelete('cascade');
             $table->foreignId('user_id')->comment('Anggota yang hadir/absen')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['Hadir', 'Absen', 'Izin'])->default('Absen');
+            $table->enum('status', ['hadir', 'absen', 'izin', 'Terdaftar'])->default('Absen');
             $table->text('notes')->nullable()->comment('Catatan jika ada, misal alasan izin');
             $table->timestamps();
 
