@@ -36,7 +36,7 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show'); // Asumsi {article} adalah ID
+// Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show'); // Asumsi {article} adalah ID
 
 // Authenticated User Routes (Mahasiswa, Pengurus, Admin, Direktorat)
 Route::middleware(['auth'])->group(function () {

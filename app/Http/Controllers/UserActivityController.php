@@ -50,7 +50,7 @@ class UserActivityController extends Controller
             $activityData = (object)[
                 'id' => $activity->id,
                 'name' => $activity->name,
-                'organizer' => $activity->ukmOrmawa->name ?? 'Penyelenggara Tidak Diketahui',
+                'organizer' => optional($activity->ukmOrmawa)->name ?? 'Penyelenggara Tidak Diketahui',
                 'date_start' => $activity->date_start->format('Y-m-d'),
                 'date_end' => $activity->date_end ? $activity->date_end->format('Y-m-d') : $activity->date_start->format('Y-m-d'),
                 'time_start' => $activity->time_start,
@@ -80,7 +80,7 @@ class UserActivityController extends Controller
         usort($past_activities, function($a, $b) {
              return strcmp($b->date_start, $a->date_start);
         });
-
+        
         return view('my-activities.index', compact('upcoming_activities', 'past_activities'));
     }
 }

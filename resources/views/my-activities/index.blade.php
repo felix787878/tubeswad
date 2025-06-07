@@ -1,29 +1,26 @@
-@extends('layouts/app-layout')
-@section('content')
+<x-app-layout>
+    {{-- Notifikasi Sesi --}}
+    @if(session('error') || session('success') || session('warning'))
+        @php
+            $type = session('error') ? 'error' : (session('success') ? 'success' : 'warning');
+            $message = session($type);
+            $colors = [
+                'error' => 'bg-red-100 border-red-300 text-red-700',
+                'success' => 'bg-green-100 border-green-300 text-green-700',
+                'warning' => 'bg-yellow-100 border-yellow-300 text-yellow-700',
+            ];
+            $bgColor = $colors[$type];
+            $id = $type . 'MessageDashboard';
+        @endphp
+        <div id="{{ $id }}" class="{{ $bgColor }} p-4 rounded-lg mb-6 relative text-sm border transition-opacity duration-300">
+            <span>{{ $message }}</span>
+            <button type="button" class="absolute top-1/2 right-3 transform -translate-y-1/2 font-semibold text-xl" onclick="document.getElementById('{{ $id }}').style.display='none'">&times;</button>
+        </div>
+    @endif
     <div class="mb-6">
         <h1 class="text-3xl font-semibold text-gray-800">Daftar Kegiatan Kampus</h1>
         <p class="text-gray-600 mt-1">Jelajahi semua kegiatan menarik yang dipublikasikan oleh UKM & Ormawa.</p>
     </div>
-
-    @if(session('success'))
-        <div class="mb-4 p-3 bg-green-100 text-green-700 border border-green-300 rounded-md text-sm" id="successNotifMyActPage">
-            {{ session('success') }}
-            <button type="button" onclick="document.getElementById('successNotifMyActPage').style.display='none'" class="float-right font-bold">&times;</button>
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="mb-4 p-3 bg-red-100 text-red-700 border border-red-300 rounded-md text-sm" id="errorNotifMyActPage">
-            {{ session('error') }}
-            <button type="button" onclick="document.getElementById('errorNotifMyActPage').style.display='none'" class="float-right font-bold">&times;</button>
-        </div>
-    @endif
-     @if(session('warning'))
-        <div class="mb-4 p-3 bg-yellow-100 text-yellow-700 border border-yellow-300 rounded-md text-sm" id="warningNotifMyActPage">
-            {{ session('warning') }}
-            <button type="button" onclick="document.getElementById('warningNotifMyActPage').style.display='none'" class="float-right font-bold">&times;</button>
-        </div>
-    @endif
-
     <div class="mb-6 border-b border-gray-200">
         <nav class="-mb-px flex space-x-4 sm:space-x-6" aria-label="Tabs">
             <button id="tab-upcoming"
@@ -176,46 +173,24 @@
             @endif
         </div>
     </div>
-@endsection
-
-    <script>
-        function showTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(function(content) {
-                content.classList.add('hidden');
-            });
-            document.querySelectorAll('.tab-button').forEach(function(button) {
-                button.classList.remove('text-indigo-600', 'border-indigo-500');
-                button.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'border-transparent');
-                button.removeAttribute('aria-current');
-            });
-
-            document.getElementById('content-' + tabName).classList.remove('hidden');
-            const activeButton = document.getElementById('tab-' + tabName);
-            activeButton.classList.add('text-indigo-600', 'border-indigo-500');
-            activeButton.classList.remove('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'border-transparent');
-            activeButton.setAttribute('aria-current', 'page');
-        }
-        // Script untuk notifikasi dan default tab dipindahkan ke @push('scripts')
-    </script>
-
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        showTab('upcoming'); // Tampilkan tab "Semua Kegiatan" secara default
-
-        // Script untuk menghilangkan notifikasi session setelah beberapa detik
-        ['successNotifMyActPage', 'errorNotifMyActPage', 'warningNotifMyActPage'].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) {
-                setTimeout(() => {
-                    if(el) { // Cek lagi karena bisa saja sudah dihapus dari DOM
-                        el.style.transition = 'opacity 0.5s ease';
-                        el.style.opacity = '0';
-                        setTimeout(() => { if(el) el.style.display = 'none'; }, 500);
-                    }
-                }, 7000); // Notifikasi hilang setelah 7 detik
-            }
+    function showTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(function(content) {
+            content.classList.add('hidden');
         });
-    });
+        document.querySelectorAll('.tab-button').forEach(function(button) {
+            button.classList.remove('text-indigo-600', 'border-indigo-500');
+            button.classList.add('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'border-transparent');
+            button.removeAttribute('aria-current');
+        });
+
+        document.getElementById('content-' + tabName).classList.remove('hidden');
+        const activeButton = document.getElementById('tab-' + tabName);
+        activeButton.classList.add('text-indigo-600', 'border-indigo-500');
+        activeButton.classList.remove('text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'border-transparent');
+        activeButton.setAttribute('aria-current', 'page');
+    }
 </script>
 @endpush
+</x-app-layout>

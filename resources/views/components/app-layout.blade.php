@@ -10,55 +10,74 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-inter">
-    {{-- Kontainer utama diubah di sini --}}
-    <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-100">
+    <div x-data="{ sidebarOpen: false, sidebarCollapsed: false }" class="flex h-screen bg-gray-100">
+
+        <div x-show="sidebarOpen" class="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden" @click="sidebarOpen = false" style="display: none;"></div>
+
         {{-- Sidebar --}}
-        <aside 
-            id="sidebar" 
-            class="bg-red-800 text-white w-64 fixed inset-y-0 left-0 top-0 z-40 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 flex-shrink-0 flex flex-col"
-            :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}"
-            @click.away="sidebarOpen = false">
-            {{-- Logo di Sidebar --}}
-            <div class="flex items-center justify-center h-16 bg-red-900 flex-shrink-0">
-                <a href="{{ route('home') }}" class="flex items-center text-white">
-                    <img src="{{ asset('/logo.png') }}" alt="Logo" class="h-8 w-auto mr-2">
-                    <span class="text-xl font-semibold">UKM Connect</span>
-                </a>
+        <aside
+            id="sidebar"
+            class="bg-red-800 text-white fixed inset-y-0 left-0 top-0 z-40 flex-shrink-0 flex flex-col transition-all duration-300 ease-in-out md:relative"
+            :class="{
+                'w-64': !sidebarCollapsed,
+                'w-20': sidebarCollapsed,
+                'translate-x-0': sidebarOpen,
+                '-translate-x-full': !sidebarOpen && window.innerWidth < 768
+            }">
+
+            <div class="flex items-center h-16 px-4 bg-red-900" :class="'justify-center'">
+                {{-- Tombol Hamburger untuk Expand/Collapse di Desktop --}}
+                <button @click="sidebarCollapsed = !sidebarCollapsed" class="text-white focus:outline-none hidden md:block" title="Toggle Sidebar">
+                    <span class="material-icons">menu</span>
+                </button>
             </div>
+
             {{-- Navigasi Sidebar --}}
             <nav class="flex-1 pt-2 pb-4 px-2 space-y-1 overflow-y-auto sidebar-scroll">
-                <a href="{{ route('home') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-red-700 {{ request()->routeIs('home') ? 'bg-red-900' : '' }}">
-                    <span class="material-icons mr-3">dashboard</span>
-                    Dashboard
+                <a href="{{ route('home') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-red-700 {{ request()->routeIs('home') ? 'bg-red-900' : '' }}" :class="{'justify-center': sidebarCollapsed}">
+                    <span class="material-icons" :class="{'mr-3': !sidebarCollapsed}">dashboard</span>
+                    <span class="transition-opacity duration-200" :class="{'opacity-0 hidden': sidebarCollapsed}">Dashboard</span>
                 </a>
-                <a href="{{ route('ukm-ormawa.index') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-red-700 {{ request()->routeIs('ukm-ormawa.index') || request()->routeIs('ukm-ormawa.show') || request()->routeIs('ukm-ormawa.apply.form') ? 'bg-red-900' : '' }}">
-                    <span class="material-icons mr-3">list_alt</span>
-                    Daftar UKM/Ormawa
+                <a href="{{ route('ukm-ormawa.index') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-red-700 {{ request()->routeIs('ukm-ormawa.index') || request()->routeIs('ukm-ormawa.show') || request()->routeIs('ukm-ormawa.apply.form') ? 'bg-red-900' : '' }}" :class="{'justify-center': sidebarCollapsed}">
+                    <span class="material-icons" :class="{'mr-3': !sidebarCollapsed}">list_alt</span>
+                    <span class="transition-opacity duration-200" :class="{'opacity-0 hidden': sidebarCollapsed}">Daftar UKM/Ormawa</span>
                 </a>
-                <a href="{{ route('my-activities.index') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-red-700 {{ request()->routeIs('my-activities.index') || request()->routeIs('activities.public.show') ? 'bg-red-900' : '' }}">
-                    <span class="material-icons mr-3">event_note</span>
-                    Kegiatan Kampus
+                <a href="{{ route('my-activities.index') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-red-700 {{ request()->routeIs('my-activities.index') || request()->routeIs('activities.public.show') ? 'bg-red-900' : '' }}" :class="{'justify-center': sidebarCollapsed}">
+                    <span class="material-icons" :class="{'mr-3': !sidebarCollapsed}">event_note</span>
+                    <span class="transition-opacity duration-200" :class="{'opacity-0 hidden': sidebarCollapsed}">Kegiatan Kampus</span>
                 </a>
-                <a href="{{ route('settings.index') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-red-700 {{ request()->routeIs('settings.index') ? 'bg-red-900' : '' }}">
-                    <span class="material-icons mr-3">settings</span>
-                    Pengaturan
+                <a href="{{ route('settings.index') }}" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-md hover:bg-red-700 {{ request()->routeIs('settings.index') ? 'bg-red-900' : '' }}" :class="{'justify-center': sidebarCollapsed}">
+                    <span class="material-icons" :class="{'mr-3': !sidebarCollapsed}">settings</span>
+                    <span class="transition-opacity duration-200" :class="{'opacity-0 hidden': sidebarCollapsed}">Pengaturan</span>
                 </a>
             </nav>
         </aside>
 
-        {{-- Main Content Area (Struktur ini tetap sama) --}}
+        {{-- Main Content Area --}}
         <div class="flex-1 flex flex-col overflow-hidden">
-            {{-- Header --}}
+            {{-- Header Utama --}}
             <header class="bg-white text-gray-700 shadow-md z-10 sticky top-0">
                 <div class="container-fluid mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center justify-between h-16">
+                        {{-- Tombol Hamburger untuk Mobile --}}
                         <button @click.stop="sidebarOpen = !sidebarOpen" class="text-gray-500 focus:outline-none md:hidden">
                             <span class="material-icons">menu</span>
                         </button>
+
+                        {{-- Logo di Header --}}
+                        <div class="flex items-center">
+                            <a href="{{ route('home') }}" class="flex items-center">
+                                <img src="{{ asset('/logo.png') }}" alt="Logo" class="h-8 w-auto mr-2">
+                                <span class="text-xl font-semibold">UKM Connect</span>
+                            </a>
+                        </div>
+
                         <div class="flex-1"></div>
+
+                        {{-- Menu Profil Pengguna --}}
                         <div class="flex items-center gap-4">
-                            @auth
-                                <div x-data="{ profileMenuOpen: false }" class="ml-3 relative">
+                             @auth
+                                 <div x-data="{ profileMenuOpen: false }" class="ml-3 relative">
                                     <div>
                                         <button @click="profileMenuOpen = !profileMenuOpen" type="button" class="max-w-xs bg-red-700 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white" id="user-menu-button">
                                             <span class="sr-only">Open user menu</span>
@@ -81,14 +100,18 @@
                     </div>
                 </div>
             </header>
+
+            {{-- Main Content (Slot untuk konten halaman) --}}
             <main class="flex-grow overflow-y-auto">
                 <div class="container mx-auto px-6 py-8">
+                    {{-- Di sinilah semua konten dari file Blade Anda akan ditampilkan --}}
                     {{ $slot }}
                 </div>
             </main>
         </div>
     </div>
 
+    {{-- Tempat untuk script yang di-push dari halaman konten --}}
     @stack('scripts')
 </body>
 </html>
