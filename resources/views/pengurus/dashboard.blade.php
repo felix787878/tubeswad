@@ -27,7 +27,7 @@
             </div>
 
             {{-- Statistik (hanya tampil jika ukmOrmawa ada) --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white overflow-hidden shadow-md sm:rounded-lg p-6">
                     <div class="flex items-center">
                         <div class="flex-shrink-0 bg-blue-500 rounded-md p-3">
@@ -50,17 +50,7 @@
                         </div>
                     </div>
                 </div>
-                 <div class="bg-white overflow-hidden shadow-md sm:rounded-lg p-6">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
-                            <span class="material-icons text-white text-2xl">article</span>
-                        </div>
-                        <div class="ml-4">
-                            <p class="text-sm font-medium text-gray-500 truncate">Artikel Terbit</p>
-                            <p class="text-2xl font-semibold text-gray-900">{{ $publishedArticlesCount ?? 0 }}</p>
-                        </div>
-                    </div>
-                </div>
+            
             </div>
 
             @if(!empty($chartData['labels']))
