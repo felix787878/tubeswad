@@ -1,4 +1,4 @@
-<x-direktorat-app-layout> {{-- Atau <x-app-layout> jika tidak pakai layout khusus --}}
+<x-direktorat-app-layout>
     <x-slot name="header">
         {{ __('Dashboard Direktorat Kemahasiswaan') }}
     </x-slot>

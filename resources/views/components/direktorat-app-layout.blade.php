@@ -38,11 +38,10 @@
                     <span class="material-icons mr-3 text-base">fact_check</span>
                     Verifikasi UKM/Ormawa
                 </a>
-                 <a href="#" class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-indigo-200 hover:bg-indigo-700 hover:text-white"> {{-- Ganti # dengan route yang sesuai nanti --}}
+                <a href="{{ route('direktorat.laporan-umum') }}" class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md {{ request()->routeIs('direktorat.direktorat.laporan-umum') ? 'bg-indigo-900 text-white' : 'text-indigo-200 hover:bg-indigo-700 hover:text-white' }}"> 
                     <span class="material-icons mr-3 text-base">summarize</span>
                     Laporan Umum
                 </a>
-                {{-- Tambahkan menu lain sesuai kebutuhan Direktorat --}}
 
                 <div class="border-t border-indigo-700 my-4"></div>
                 <a href="{{ route('direktorat.settings.index') }}" class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md {{ request()->routeIs('settings.index') ? 'bg-indigo-900 text-white' : 'text-indigo-200 hover:bg-indigo-700 hover:text-white' }}">

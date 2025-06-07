@@ -26,6 +26,7 @@ use App\Http\Controllers\ActivityController; // Untuk publik dan pendaftaran keg
 use App\Http\Controllers\Direktorat\DirektoratDashboardController;
 use App\Http\Controllers\Direktorat\UkmManagementController;
 use App\Http\Controllers\Direktorat\DirektoratSettingsController;
+use App\Http\Controllers\Direktorat\DirektoratUkmOrmawaController;
 
 // Auth Routes
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -106,7 +107,9 @@ Route::middleware(['auth', 'role:pengurus'])->prefix('pengurus')->name('pengurus
 Route::middleware(['auth', 'role:direktorat'])->prefix('direktorat')->name('direktorat.')->group(function () {
     Route::get('/dashboard', [DirektoratDashboardController::class, 'index'])->name('dashboard');
 
-    
+    Route::get('/laporan-umum', [DirektoratUkmOrmawaController::class, 'index'])->name('laporan-umum');
+    // Route::get('/verif-ukm-ormawa/{ukmOrmawa}/show', [DirektoratUkmOrmawaController::class, 'show'])->name('laporan-umum.show');
+    Route::get('/laporan-umum/{slug}', [DirektoratUkmOrmawaController::class, 'show'])->name('laporan-umum.show');
 
     Route::get('/verif-ukm-ormawa', [UkmManagementController::class, 'index'])->name('ukm-ormawa.index');
     Route::get('/verif-ukm-ormawa/{ukmOrmawa}/show', [UkmManagementController::class, 'show'])->name('ukm-ormawa.show');
