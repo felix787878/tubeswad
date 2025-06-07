@@ -59,24 +59,8 @@
                             </a>
                         </div>
 
-                        <div class="flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end">
-                            <div class="max-w-md w-full lg:max-w-xs">
-                                <label for="search" class="sr-only">Search</label>
-                                <div class="relative text-gray-400 focus-within:text-gray-600">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="material-icons text-sm">search</span>
-                                    </div>
-                                    <input id="search" name="search" class="block w-full bg-red-600 placeholder-red-300 text-white border border-transparent rounded-md py-2 pl-10 pr-3 leading-5 focus:outline-none focus:bg-white focus:text-gray-900 focus:placeholder-gray-500 focus:ring-0 focus:border-white sm:text-sm" placeholder="Search..." type="search">
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="flex items-center ml-4">
                             @auth
-                                <button class="p-1 rounded-full text-red-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white">
-                                    <span class="material-icons">notifications</span>
-                                </button>
-
                                 <div class="ml-3 relative">
                                     <div>
                                         <button type="button" class="max-w-xs bg-red-700 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-700 focus:ring-white" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
