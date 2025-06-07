@@ -58,7 +58,7 @@
                                     <span class="mt-1 inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-slate-200 text-slate-700">{{ ucfirst(Auth::user()->role) }}</span>
                                 </div>
                                 <div class="border-t border-gray-100"></div>
-                                <a href="{{ route('pengurus.settings.index') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" @click="profileMenuOpen = false"> {{-- Tambahkan @click untuk menutup saat item dipilih --}}
+                                <a href="{{ route('settings.index') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" @click="profileMenuOpen = false"> {{-- Tambahkan @click untuk menutup saat item dipilih --}}
                                     <span class="material-icons text-base mr-2 align-middle">manage_accounts</span>Pengaturan Akun
                                 </a>
                                 <div class="border-t border-gray-100"></div>
