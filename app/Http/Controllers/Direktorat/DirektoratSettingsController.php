@@ -73,11 +73,9 @@ class DirektoratSettingsController extends Controller
         // Untuk saat ini, kita hanya akan redirect dengan pesan sukses (simulasi)
         // Implementasi penghapusan sebenarnya perlu hati-hati dan mungkin memerlukan konfirmasi tambahan
         
-        // Jika Anda benar-benar mengimplementasikan hapus akun:
-        // Auth::logout();
-        // $user->delete();
-        // return redirect('/login')->with('success', 'Akun Anda telah berhasil dihapus.');
-
-        return back()->with('successDelete', 'Permintaan hapus akun diterima (ini adalah simulasi). Fitur hapus akun perlu implementasi lebih lanjut.');
+        //Jika Anda benar-benar mengimplementasikan hapus akun:
+        Auth::logout();
+        $user->delete();
+        return redirect('/login')->with('success', 'Akun Anda telah berhasil dihapus.');
     }
 }

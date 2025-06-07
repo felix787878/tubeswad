@@ -70,9 +70,10 @@
         @endif
 
         <div class="border-t border-slate-700 my-4"></div>
-        <a href="{{ route('pengurus.settings.index') }}" class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md {{ request()->routeIs('settings.index') ? 'bg-slate-900 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
-            <span class="material-icons mr-3 text-base">settings</span>
-            Pengaturan Akun Saya
+        <a href="{{ route('settings.index') }}" class="group flex items-center px-3 py-2.5 text-sm font-medium rounded-md {{ request()->routeIs('settings.index') ? 'bg-slate-900 text-white' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
+            <span class="material-icons mr-3 text-base">settings</span>
+            Pengaturan Akun Saya
+        </a>
         </a>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
