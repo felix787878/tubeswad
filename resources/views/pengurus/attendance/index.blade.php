@@ -113,7 +113,7 @@
                     @endif
                 </div>
             @else
-                @if($selectedActivityId || $request->filled('filter_status_kegiatan'))
+                @if($selectedActivityId || request()->filled('filter_status_kegiatan'))
                 <div class="bg-white text-center py-12 rounded-lg shadow-md">
                     <span class="material-icons text-5xl text-gray-400 mb-3">search_off</span>
                     <p class="text-xl text-gray-600">Tidak ada data kehadiran ditemukan untuk filter yang dipilih.</p>
