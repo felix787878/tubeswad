@@ -66,11 +66,7 @@
                         <span class="material-icons text-gray-400">person_outline</span>
                     </div>
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
-<<<<<<< HEAD
                            placeholder="mahasiswa@email.com"
-=======
-                           placeholder="email" {{-- Sesuai screenshot --}}
->>>>>>> dab9ac8d9e3dedb6ba753c43b3dc54612a200ff3
                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm @error('email') border-red-500 ring-red-500 @enderror">
                 </div>
             </div>

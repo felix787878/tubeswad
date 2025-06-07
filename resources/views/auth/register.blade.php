@@ -32,16 +32,15 @@
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
-            {{-- Input Username (sebelumnya Name) --}}
+            {{-- Input --}}
             <div class="mb-5">
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Username</label> {{-- Label diubah --}}
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
                 <div class="relative rounded-md shadow-sm">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="material-icons text-gray-400">person_outline</span> {{-- Icon diubah agar mirip field Username di login --}}
+                        <span class="material-icons text-gray-400">person_outline</span>
                     </div>
-                    {{-- 'name' attribute tetap 'name' untuk backend --}}
                     <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus
-                           placeholder="username" {{-- Placeholder disamakan seperti field Username di login --}}
+                           placeholder="Mahasiswa Teladan"
                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm @error('name') border-red-500 ring-red-500 @enderror">
                 </div>
             </div>
@@ -55,7 +54,7 @@
                         <span class="material-icons text-gray-400">email_outline</span>
                     </div>
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                           placeholder="email"
+                           placeholder="mahasiswa@email.com"
                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm @error('email') border-red-500 ring-red-500 @enderror">
                 </div>
             </div>

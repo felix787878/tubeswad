@@ -95,10 +95,10 @@ Route::middleware(['auth', 'role:pengurus'])->prefix('pengurus')->name('pengurus
     Route::get('/attendance-reports', [PengurusActivityController::class, 'attendanceReport'])->name('attendance.reports');
 
     // Pengaturan Akun
-    //Route::get('/pengaturan', [PengurusSettingsController::class, 'index'])->name('settings.index');
-    //Route::post('/pengaturan/profil', [PengurusSettingsController::class, 'updateProfile'])->name('settings.profile.update');
-    //Route::post('/pengaturan/password', [PengurusSettingsController::class, 'updatePassword'])->name('settings.password.update');
-    //Route::delete('/pengaturan/akun', [PengurusSettingsController::class, 'deleteAccount'])->name('settings.account.delete');
+    Route::get('/pengaturan', [PengurusSettingsController::class, 'index'])->name('settings.index');
+    Route::post('/pengaturan/profil', [PengurusSettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::post('/pengaturan/password', [PengurusSettingsController::class, 'updatePassword'])->name('settings.password.update');
+    Route::delete('/pengaturan/akun', [PengurusSettingsController::class, 'deleteAccount'])->name('settings.account.delete');
 });
 
 // Direktorat Routes
@@ -112,10 +112,10 @@ Route::middleware(['auth', 'role:direktorat'])->prefix('direktorat')->name('dire
     Route::delete('/ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'destroy'])->name('ukm-ormawa.destroy');
 
     // Pengaturan Akun
-    //Route::get('/pengaturan', [DirektoratSettingsController::class, 'index'])->name('settings.index');
-    //Route::post('/pengaturan/profil', [DirektoratSettingsController::class, 'updateProfile'])->name('settings.profile.update');
-    //Route::post('/pengaturan/password', [DirektoratSettingsController::class, 'updatePassword'])->name('settings.password.update');
-    //Route::delete('/pengaturan/akun', [DirektoratSettingsController::class, 'deleteAccount'])->name('settings.account.delete');
+    Route::get('/pengaturan', [DirektoratSettingsController::class, 'index'])->name('settings.index');
+    Route::post('/pengaturan/profil', [DirektoratSettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::post('/pengaturan/password', [DirektoratSettingsController::class, 'updatePassword'])->name('settings.password.update');
+    Route::delete('/pengaturan/akun', [DirektoratSettingsController::class, 'deleteAccount'])->name('settings.account.delete');
 });
 
 // Proxy API GoAPI Regional (jika diletakkan di web.php)

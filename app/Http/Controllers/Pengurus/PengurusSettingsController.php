@@ -65,15 +65,13 @@ class PengurusSettingsController extends Controller
         if (!Hash::check($request->password_confirm_delete, $user->password)) {
             return back()->withErrors(['password_confirm_delete' => 'Password konfirmasi salah. Akun tidak dihapus.'])->withInput();
         }
+$user = Auth::user();
 
-        // Proses penghapusan akun
-        // Auth::logout(); // Logout dulu
-        // $user->delete(); // Hapus pengguna
+        // Validasi password sebelum hapus akun (sangat disarankan)
+        if (!Hash::check($request->password_confirm_delete, $user->password)) {
+            return back()->withErrors(['password_confirm_delete' => 'Password konfirmasi salah. Akun tidak dihapus.'])->withInput();
+        }
 
-        // Untuk saat ini, kita hanya akan redirect dengan pesan sukses (simulasi)
-        // Implementasi penghapusan sebenarnya perlu hati-hati dan mungkin memerlukan konfirmasi tambahan
-        
-        // Jika benar-benar mengimplementasikan hapus akun:
         Auth::logout();
         $user->delete();
         return redirect('/login')->with('success', 'Akun Anda telah berhasil dihapus.');
