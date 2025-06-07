@@ -113,10 +113,14 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        {{-- Tombol Lihat Detail (selalu tampil) --}}
                                         <a href="{{ route('pengurus.members.show', $app->id) }}" class="text-indigo-600 hover:text-indigo-900" title="Lihat Detail Pendaftaran">
                                             <span class="material-icons text-base align-middle">visibility</span>
                                         </a>
+
+                                        {{-- Aksi jika status masih PENDING --}}
                                         @if($app->status == 'pending')
+                                            {{-- Form Setujui --}}
                                             <form action="{{ route('pengurus.members.updateStatus', $app->id) }}" method="POST" class="inline" onsubmit="return confirm('Anda yakin ingin menyetujui pendaftar ini?');">
                                                 @csrf
                                                 @method('PATCH')
@@ -125,21 +129,46 @@
                                                     <span class="material-icons text-base align-middle">check_circle_outline</span>
                                                 </button>
                                             </form>
+                                            {{-- Form Tolak --}}
                                             <form action="{{ route('pengurus.members.updateStatus', $app->id) }}" method="POST" class="inline" onsubmit="return confirm('Anda yakin ingin menolak pendaftar ini?');">
                                                 @csrf
                                                 @method('PATCH')
                                                 <input type="hidden" name="status" value="rejected">
                                                 <button type="submit" class="text-red-600 hover:text-red-900" title="Tolak">
-                                                     <span class="material-icons text-base align-middle">highlight_off</span>
+                                                    <span class="material-icons text-base align-middle">highlight_off</span>
                                                 </button>
                                             </form>
-                                        @elseif($app->status == 'approved' || $app->status == 'rejected')
-                                             <form action="{{ route('pengurus.members.updateStatus', $app->id) }}" method="POST" class="inline" onsubmit="return confirm('Kembalikan status pendaftar ini ke Pending?');">
+                                        
+                                        {{-- Aksi jika status sudah APPROVED --}}
+                                        @elseif($app->status == 'approved')
+                                            {{-- Form Keluarkan Anggota (BARU) --}}
+                                            <form action="{{ route('pengurus.members.destroy', $app->id) }}" method="POST" class="inline" onsubmit="return confirm('PERINGATAN: Anda akan mengeluarkan anggota ini secara permanen. Lanjutkan?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-900" title="Keluarkan Anggota">
+                                                    <span class="material-icons text-base align-middle">person_remove</span>
+                                                </button>
+                                            </form>
+
+                                            {{-- Form Kembalikan ke Pending --}}
+                                            <form action="{{ route('pengurus.members.updateStatus', $app->id) }}" method="POST" class="inline" onsubmit="return confirm('Kembalikan status pendaftar ini ke Pending?');">
                                                 @csrf
                                                 @method('PATCH')
                                                 <input type="hidden" name="status" value="pending">
                                                 <button type="submit" class="text-gray-500 hover:text-gray-700" title="Set ke Pending">
-                                                     <span class="material-icons text-base align-middle">settings_backup_restore</span>
+                                                    <span class="material-icons text-base align-middle">settings_backup_restore</span>
+                                                </button>
+                                            </form>
+
+                                        {{-- Aksi jika status sudah REJECTED --}}
+                                        @elseif($app->status == 'rejected')
+                                            {{-- Form Kembalikan ke Pending --}}
+                                            <form action="{{ route('pengurus.members.updateStatus', $app->id) }}" method="POST" class="inline" onsubmit="return confirm('Kembalikan status pendaftar ini ke Pending?');">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="status" value="pending">
+                                                <button type="submit" class="text-gray-500 hover:text-gray-700" title="Set ke Pending">
+                                                    <span class="material-icons text-base align-middle">settings_backup_restore</span>
                                                 </button>
                                             </form>
                                         @endif

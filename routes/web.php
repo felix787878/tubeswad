@@ -90,6 +90,7 @@ Route::middleware(['auth', 'role:pengurus'])->prefix('pengurus')->name('pengurus
     Route::get('/members', [MemberManagementController::class, 'index'])->name('members.index');
     Route::get('/members/{application}/show', [MemberManagementController::class, 'showApplication'])->name('members.show');
     Route::patch('/members/{application}/status', [MemberManagementController::class, 'updateStatus'])->name('members.updateStatus');
+    Route::delete('/members/{application}', [MemberManagementController::class, 'destroy'])->name('members.destroy');
     
     Route::resource('activities', PengurusActivityController::class)->except(['show']);
     Route::get('/attendance-reports', [PengurusActivityController::class, 'attendanceReport'])->name('attendance.reports');

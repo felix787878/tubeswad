@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function managesUkmOrmawa()
     {
-        return $this->belongsTo(UkmOrmawa::class, 'pengurus_id');
+        return $this->hasOne(UkmOrmawa::class, 'pengurus_id');
     }
 
     public function ukmApplications()

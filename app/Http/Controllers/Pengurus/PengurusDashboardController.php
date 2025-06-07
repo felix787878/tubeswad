@@ -17,7 +17,6 @@ class PengurusDashboardController extends Controller
     {
         $pengurus = Auth::user();
         $ukmOrmawa = $pengurus->managesUkmOrmawa; // Ini bisa null jika pengurus baru
-
         // Data default jika $ukmOrmawa adalah null, agar view tidak error
         $memberCount = 0;
         $newApplicationsCount = 0;
@@ -35,16 +34,6 @@ class PengurusDashboardController extends Controller
                                                 ->where('status', 'pending')
                                                 ->count();
             
-            // Artikel yang dibuat oleh pengurus ini ATAU terkait dengan UKM/Ormawa
-            // Sesuaikan logika ini. Misal, artikel yang user_id nya adalah pengurus ini
-            // ATAU jika artikel punya kolom ukm_ormawa_id
-            $publishedArticlesCount = Article::where(function ($query) use ($pengurus, $ukmOrmawa) {
-                                        $query->where('user_id', $pengurus->id);
-                                        if ($ukmOrmawa) { // Cek lagi untuk keamanan
-                                            // $query->orWhere('ukm_ormawa_id', $ukmOrmawa->id); // Jika ada relasi artikel ke UKM
-                                        }
-                                    })->count();
-
 
             // Data untuk Chart Pendaftaran Anggota per Bulan
             $months = [];

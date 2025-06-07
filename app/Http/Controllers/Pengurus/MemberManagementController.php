@@ -76,8 +76,20 @@ $stats = [
         if (!$ukmOrmawa || $application->ukm_ormawa_id !== $ukmOrmawa->id) {
             return redirect()->route('pengurus.members.index')->with('error', 'Detail pendaftaran tidak ditemukan atau Anda tidak berhak mengaksesnya.');
         }
-        
-        // Anda bisa membuat view detail di: resources/views/pengurus/members/show.blade.php
+
         return view('pengurus.members.show', compact('application', 'ukmOrmawa'));
+    }
+
+    public function destroy(UkmApplication $application)
+    {
+        $ukmOrmawaId = auth()->user()->managesUkmOrmawa->id;
+        if ($application->ukm_ormawa_id !== $ukmOrmawaId) {
+            abort(403, 'ANDA TIDAK MEMILIKI IZIN UNTUK MELAKUKAN AKSI INI.');
+        }
+
+        $application->delete();
+
+        return redirect()->route('pengurus.members.index')
+                        ->with('success', 'Anggota telah berhasil dikeluarkan dari UKM.');
     }
 }
