@@ -58,7 +58,7 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password salah!',
+            'email' => 'Email atau Password salah!',
         ])->withInput($request->only('email', 'remember'));
     }
 

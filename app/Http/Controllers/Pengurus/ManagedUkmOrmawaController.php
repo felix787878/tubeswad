@@ -21,7 +21,7 @@ class ManagedUkmOrmawaController extends Controller
     public function editOrCreate()
     {
         $user = Auth::user();
-        $ukmOrmawa = $user->managesUkmOrmawa;
+        $ukmOrmawa = $user->createdUkmOrmawa;
 
         if (!$ukmOrmawa) {
             // Jika pengurus belum punya UKM, arahkan ke form create
@@ -36,7 +36,7 @@ class ManagedUkmOrmawaController extends Controller
     {
         // Pengecekan: jika pengurus sudah punya UKM, jangan biarkan membuat lagi.
         // Langsung arahkan ke halaman edit.
-        if (Auth::user()->managesUkmOrmawa) {
+        if (Auth::user()->createdUkmOrmawa) {
             return redirect()->route('pengurus.ukm-ormawa.edit')->with('info', 'Anda sudah mengelola UKM/Ormawa. Silakan edit data yang sudah ada.');
         }
         // Jika belum punya, tampilkan form untuk membuat UKM baru.
@@ -47,7 +47,7 @@ class ManagedUkmOrmawaController extends Controller
     {
         // Mengambil UKM yang dikelola oleh user yang sedang login.
         // `firstOrFail()` akan menampilkan error 404 jika tidak ditemukan, lebih baik daripada null.
-        $ukmOrmawa = Auth::user()->managesUkmOrmawa()->firstOrFail();
+        $ukmOrmawa = Auth::user()->createdUkmOrmawa()->firstOrFail();
         
         return view('pengurus.ukm-ormawa.edit', compact('ukmOrmawa'));
     }
@@ -57,7 +57,7 @@ class ManagedUkmOrmawaController extends Controller
      */
     public function update(Request $request)
     {
-        $ukmOrmawa = Auth::user()->managesUkmOrmawa()->firstOrFail();
+        $ukmOrmawa = Auth::user()->createdUkmOrmawa()->firstOrFail();
 
         // 1. Validasi data dari request
         $validated = $request->validate([
@@ -65,8 +65,8 @@ class ManagedUkmOrmawaController extends Controller
             'name' => 'required|string|max:255|unique:ukm_ormawas,name,' . $ukmOrmawa->id,
             'type' => 'required|in:UKM,Ormawa',
             'category' => 'required|string|max:255',
-            'logo_url_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'banner_url_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
+            'logo_url_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'banner_url_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
             'description_full' => 'nullable|string',
             'visi' => 'nullable|string',
             'misi_input' => 'nullable|string',
@@ -90,7 +90,7 @@ class ManagedUkmOrmawaController extends Controller
         $dataToUpdate['slug'] = Str::slug($validated['name']);
 
         // Set status kembali ke "Menunggu Verifikasi" setiap kali ada update
-        $dataToUpdate['status'] = 'Menunggu Verifikasi';
+        $dataToUpdate['status'] = 'pending_verification';
 
         // Handle checkbox 'is_registration_open'
         $dataToUpdate['is_registration_open'] = $request->has('is_registration_open');
@@ -137,8 +137,8 @@ class ManagedUkmOrmawaController extends Controller
             'name' => 'required|string|max:255|unique:ukm_ormawas,name',
             'type' => 'required|in:UKM,Ormawa',
             'category' => 'required|string|max:255',
-            'logo_url_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'banner_url_file' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
+            'logo_url_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'banner_url_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:4096',
             'description_short' => 'nullable|string|max:500',
             'description_full' => 'nullable|string',
             'visi' => 'nullable|string',
@@ -158,7 +158,7 @@ class ManagedUkmOrmawaController extends Controller
         // 2. Siapkan data untuk disimpan
         $dataToCreate = $validated;
         $dataToCreate['slug'] = Str::slug($validated['name']);
-        $dataToCreate['status'] = 'Menunggu Verifikasi';
+        $dataToCreate['status'] = 'pending_verification';
         $dataToCreate['is_registration_open'] = $request->has('is_registration_open');
 
         // 3. Proses file upload

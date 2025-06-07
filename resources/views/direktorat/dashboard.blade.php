@@ -74,7 +74,7 @@
             <div class="p-6 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-xl font-semibold text-gray-700">UKM/Ormawa Menunggu Verifikasi Terbaru</h2>
                 @if($pendingVerification > 0)
-                <a href="{{ route('direktorat.ukm-ormawa.index', ['status' => 'Menunggu Verifikasi']) }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">
+                <a href="{{ route('direktorat.ukm-ormawa.index', ['status' => 'pending_verification']) }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800">
                     Lihat Semua &rarr;
                 </a>
                 @endif
