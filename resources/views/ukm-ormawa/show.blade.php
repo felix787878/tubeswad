@@ -179,7 +179,7 @@
                                 </div>
 
                                 <!-- Kolom Peta Sematan (Embedded Map) -->
-                                <!-- <div>
+                                <div>
                                     @if($item->google_maps_link)
                                         @php
                                             // Logika sederhana untuk mengubah link share menjadi link embed
@@ -205,7 +205,7 @@
                                             <p class="text-gray-500">Peta tidak tersedia.</p>
                                         </div>
                                     @endif
-                                </div> -->
+                                </div>
 
                             </div>
                         @else

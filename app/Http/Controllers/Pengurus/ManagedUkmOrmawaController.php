@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pengurus;
 use App\Http\Controllers\Controller;
 use App\Models\UkmOrmawa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http; 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -13,6 +14,8 @@ class ManagedUkmOrmawaController extends Controller
 {
     /**
      * Show the form for editing the managed UKM/Ormawa.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
      */
 
     public function editOrCreate()
@@ -182,5 +185,78 @@ class ManagedUkmOrmawaController extends Controller
         $ukmOrmawa = Auth::user()->createdUkmOrmawa()->create($dataToCreate);
 
         return redirect()->route('pengurus.ukm-ormawa.edit')->with('success', 'Profil UKM/Ormawa berhasil dibuat dan diajukan untuk verifikasi.');
+    }
+    
+    public function cariAlamat(Request $request)
+    {
+        // 1. Validasi Input menggunakan fitur validasi Laravel
+        $validator = validator($request->all(), [
+            'keyword' => 'required|string|min:3',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $keyword = $request->input('keyword');
+
+        // 2. Memanggil API Eksternal menggunakan HTTP Client Laravel
+        $apiUrl = "https://alamat.thecloudalert.com/api/cari/index/";
+        
+        $response = Http::get($apiUrl, [
+            'keyword' => $keyword,
+        ]);
+
+        // Cek jika request ke API eksternal gagal
+        if ($response->failed()) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Gagal terhubung ke API alamat.'
+            ], 500);
+        }
+
+        $data = $response->json();
+
+        // 3. Logika Utama: Memfilter Hasil Duplikat
+        if (isset($data['status']) && $data['status'] === 200 && !empty($data['result'])) {
+            
+            $uniqueResults = [];
+            $trackedKeys = [];
+
+            foreach ($data['result'] as $item) {
+                $key = "{$item['desakel']}|{$item['kecamatan']}|{$item['kabkota']}|{$item['provinsi']}";
+                
+                if (!isset($trackedKeys[$key])) {
+                    $trackedKeys[$key] = true;
+                    $uniqueResults[] = $item;
+                }
+            }
+
+            if (empty($uniqueResults)) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'Alamat tidak ditemukan.',
+                    'result' => []
+                ], 404);
+            }
+
+            // Mengembalikan respons JSON menggunakan helper Laravel
+            return response()->json([
+                'status' => 200,
+                'message' => 'Data berhasil ditemukan.',
+                'result' => $uniqueResults
+            ], 200);
+
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Alamat tidak ditemukan.',
+                'result' => []
+            ], 404);
+        }
     }
 }

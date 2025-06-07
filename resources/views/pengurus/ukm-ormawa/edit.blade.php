@@ -229,6 +229,8 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const searchApiUrl = "{{ route('api.alamat.search') }}";
+
         const searchInput = document.getElementById('location_search');
         const resultsContainer = document.getElementById('search-results');
         const spinner = document.getElementById('search-spinner');
@@ -259,7 +261,7 @@
             resultsContainer.innerHTML = '<div class="p-3 text-sm text-gray-500">Mencari...</div>';
 
             try {
-                const response = await fetch(`https://alamat.thecloudalert.com/api/cari/index/?keyword=${keyword}`);
+                const response = await fetch(`${searchApiUrl}?keyword=${keyword}`);
                 const data = await response.json();
 
                 spinner.classList.add('hidden');
