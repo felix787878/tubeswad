@@ -105,12 +105,15 @@ Route::middleware(['auth', 'role:pengurus'])->prefix('pengurus')->name('pengurus
 // Direktorat Routes
 Route::middleware(['auth', 'role:direktorat'])->prefix('direktorat')->name('direktorat.')->group(function () {
     Route::get('/dashboard', [DirektoratDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/ukm-ormawa', [UkmManagementController::class, 'index'])->name('ukm-ormawa.index');
-    Route::get('/ukm-ormawa/{ukmOrmawa}/show', [UkmManagementController::class, 'show'])->name('ukm-ormawa.show');
-    Route::patch('/ukm-ormawa/{ukmOrmawa}/update-status', [UkmManagementController::class, 'updateStatus'])->name('ukm-ormawa.updateStatus');
-    Route::get('/ukm-ormawa/{ukmOrmawa}/edit', [UkmManagementController::class, 'edit'])->name('ukm-ormawa.edit');
-    Route::put('/ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'update'])->name('ukm-ormawa.update');
-    Route::delete('/ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'destroy'])->name('ukm-ormawa.destroy');
+
+    
+
+    Route::get('/verif-ukm-ormawa', [UkmManagementController::class, 'index'])->name('ukm-ormawa.index');
+    Route::get('/verif-ukm-ormawa/{ukmOrmawa}/show', [UkmManagementController::class, 'show'])->name('ukm-ormawa.show');
+    Route::patch('/verif-ukm-ormawa/{ukmOrmawa}/update-status', [UkmManagementController::class, 'updateStatus'])->name('ukm-ormawa.updateStatus');
+    Route::get('/verif-ukm-ormawa/{ukmOrmawa}/edit', [UkmManagementController::class, 'edit'])->name('ukm-ormawa.edit');
+    Route::put('/verif-ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'update'])->name('ukm-ormawa.update');
+    Route::delete('/verif-ukm-ormawa/{ukmOrmawa}', [UkmManagementController::class, 'destroy'])->name('ukm-ormawa.destroy');
 
     // Pengaturan Akun
     Route::get('/pengaturan', [DirektoratSettingsController::class, 'index'])->name('settings.index');
