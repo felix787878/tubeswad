@@ -14,8 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             // Seeder lain yang ingin Anda panggil, contoh:
-            UkmOrmawaSeeder::class, // Pastikan class ini ada dan benar
             PredefinedUsersSeeder::class, // Pastikan class ini ada dan benar
+            // UkmOrmawaSeeder::class, // Pastikan class ini ada dan benar
             // AdminSeeder::class, // Jika Anda menggunakan ini
         ]);
 
