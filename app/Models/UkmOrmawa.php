@@ -12,6 +12,7 @@ class UkmOrmawa extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'pengurus_id', 
         'name',
         'slug',

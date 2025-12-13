@@ -160,6 +160,7 @@ class ManagedUkmOrmawaController extends Controller
         $dataToCreate['slug'] = Str::slug($validated['name']);
         $dataToCreate['status'] = 'pending_verification';
         $dataToCreate['is_registration_open'] = $request->has('is_registration_open');
+        $dataToCreate['user_id'] = Auth::id();
 
         // 3. Proses file upload
         if ($request->hasFile('logo_url_file')) {
